@@ -29,10 +29,10 @@ export function AppHeader({ apiStatus = "online" }: { apiStatus?: "online" | "ch
         <div className="mx-auto flex h-11 max-w-7xl items-center justify-between gap-3">
           <Link href="/" className="group flex min-w-0 items-center gap-3">
             <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-[var(--dracula-purple)]/40 shadow-lg shadow-black/20 transition-colors group-hover:border-[var(--dracula-cyan)]/50">
-              <Image src="/brand-logo.png" alt="Transactional Wallet Ledger logo" fill sizes="40px" className="object-cover" />
+              <Image src="/brand-logo.png" alt="Simple Bank logo" fill sizes="40px" className="object-cover" />
             </span>
             <span className="min-w-0">
-              <span className="block truncate text-sm font-bold text-[var(--dracula-fg)]">Ledger Demo</span>
+              <span className="block truncate text-sm font-bold text-[var(--dracula-fg)]">Simple Bank</span>
               <span className="hidden text-xs text-[var(--dracula-comment)] sm:block">Next.js transactional API</span>
             </span>
           </Link>

@@ -3,7 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import z from "zod";
 import { prisma } from "@/lib/prisma";
-import { publicUserSelect } from "@/lib/ledger";
+import { publicUserSelect } from "@/lib/ledger-selects";
 
 const credentialsSchema = z.object({
   email: z.email(),

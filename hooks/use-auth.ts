@@ -4,7 +4,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { ApiError, parseJsonResponse, type ApiUser } from "@/lib/api-types";
+import { ApiError, type ApiUser } from "@/lib/api-types";
+import { fetchCurrentUser } from "@/lib/services/banking-api";
 
 export function useAuth() {
   const router = useRouter();
@@ -14,11 +15,7 @@ export function useAuth() {
 
   const meQuery = useQuery({
     queryKey: ["me"],
-    queryFn: async () => {
-      const response = await fetch("/api/users/me", { credentials: "same-origin" });
-      const data = await parseJsonResponse<{ user: ApiUser }>(response, "Could not load authenticated user.");
-      return data.user;
-    },
+    queryFn: fetchCurrentUser,
     enabled: isAuthenticated,
   });
 
@@ -34,9 +31,7 @@ export function useAuth() {
         throw new ApiError("Invalid email or password.", 401);
       }
 
-      const response = await fetch("/api/users/me", { credentials: "same-origin" });
-      const data = await parseJsonResponse<{ user: ApiUser }>(response, "Could not load authenticated user.");
-      return data.user;
+      return fetchCurrentUser();
     },
     onSuccess: (user: ApiUser) => {
       queryClient.setQueryData(["me"], user);

@@ -4,15 +4,15 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
-  title: "Transactional Wallet Ledger",
-  description: "Technical demo for a production-style transactional wallet ledger API.",
+  title: "Simple Bank",
+  description: "Technical demo for a production-style simple banking ledger API.",
   icons: {
     icon: "/brand-logo.png",
     apple: "/brand-logo.png",
   },
   openGraph: {
-    title: "Transactional Wallet Ledger",
-    description: "Technical demo for a production-style transactional wallet ledger API.",
+    title: "Simple Bank",
+    description: "Technical demo for a production-style simple banking ledger API.",
     images: ["/brand-logo.png"],
   },
 };

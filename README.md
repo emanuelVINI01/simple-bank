@@ -1,10 +1,10 @@
-# Transactional Wallet Ledger
+# Simple Bank
 
-Transactional Wallet Ledger is a single Next.js application for a mobile-first fintech ledger demo. The UI, authentication, API route handlers, Prisma data layer and receipt generation now live in the repository root, so the project can be deployed to Vercel as one app.
+Simple Bank is a single Next.js application for a mobile-first fintech banking demo. The UI, authentication, API route handlers, Prisma data layer and receipt generation live in the repository root, so the project can be deployed to Vercel as one app.
 
 ## Short Description
 
-Mobile-first Dracula wallet ledger built with Next.js, Auth.js v5, JWT sessions, Prisma, PostgreSQL, TanStack Query, Framer Motion and Tailwind CSS. It demonstrates credential authentication, protected local API routes, wallet balances, payment keys, ledger transactions, idempotent transfer references and authenticated PDF receipts.
+Mobile-first Dracula banking ledger built with Next.js, Auth.js v5, JWT sessions, Prisma, PostgreSQL, TanStack Query, Framer Motion and Tailwind CSS. It demonstrates credential authentication, protected local API routes, account balances, payment keys, ledger transactions, idempotent transfer references and authenticated PDF receipts.
 
 ## Features
 

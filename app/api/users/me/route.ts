@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { findCurrentUser, publicUser } from "@/lib/ledger";
+import { publicUser } from "@/lib/ledger-mappers";
+import { findCurrentUser } from "@/lib/user-service";
 
 export async function GET() {
   const session = await auth();

@@ -1,5 +1,5 @@
 {
-  "name": "transactional-wallet-ledger",
+  "name": "simple-bank",
   "version": "0.1.0",
   "private": true,
   "scripts": {

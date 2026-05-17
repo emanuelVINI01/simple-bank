@@ -1,26 +1,13 @@
 "use client";
 
 import { ArrowDownLeft, ArrowUpRight, Download, Loader2, ReceiptText } from "lucide-react";
-import { useState } from "react";
-import { ApiError, type ApiTransaction } from "@/lib/api-types";
+import { useReceiptDownload } from "@/hooks/use-receipt-download";
+import type { ApiTransaction } from "@/lib/api-types";
 import { formatDate, formatMoney } from "@/lib/format";
-import { downloadReceiptPdf } from "@/lib/receipt";
+import { getTransactionTypeMeta, truncateReference } from "@/lib/transaction-mappers";
 
 export function TransactionTable({ transactions }: { transactions: ApiTransaction[] }) {
-  const [downloadingId, setDownloadingId] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  async function downloadReceipt(transactionId: string) {
-    try {
-      setError(null);
-      setDownloadingId(transactionId);
-      await downloadReceiptPdf(transactionId);
-    } catch (downloadError) {
-      setError(downloadError instanceof ApiError ? downloadError.message : "Could not download receipt.");
-    } finally {
-      setDownloadingId(null);
-    }
-  }
+  const receiptDownload = useReceiptDownload();
 
   if (transactions.length === 0) {
     return (
@@ -37,7 +24,7 @@ export function TransactionTable({ transactions }: { transactions: ApiTransactio
       <div className="border-b border-white/[0.06] px-5 py-4">
         <h2 className="text-lg font-bold text-white">Ledger transactions</h2>
         <p className="mt-1 text-sm text-[#a7b0c8]">Debit and credit rows returned by local Next.js API routes.</p>
-        {error ? <p className="mt-2 text-sm text-[#ff79c6]">{error}</p> : null}
+        {receiptDownload.error ? <p className="mt-2 text-sm text-[#ff79c6]">{receiptDownload.error}</p> : null}
       </div>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[760px] text-left">
@@ -53,27 +40,28 @@ export function TransactionTable({ transactions }: { transactions: ApiTransactio
           </thead>
           <tbody className="divide-y divide-white/[0.06]">
             {transactions.map((transaction) => {
-              const isCredit = transaction.type === "CREDIT";
+              const typeMeta = getTransactionTypeMeta(transaction.type);
+
               return (
                 <tr key={transaction.id} className="text-sm text-[#f8f8f2]">
                   <td className="px-5 py-4">
-                    <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold ${isCredit ? "bg-[#50fa7b]/10 text-[#50fa7b]" : "bg-[#ff79c6]/10 text-[#ff79c6]"}`}>
-                      {isCredit ? <ArrowDownLeft className="h-3.5 w-3.5" /> : <ArrowUpRight className="h-3.5 w-3.5" />}
+                    <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold ${typeMeta.className}`}>
+                      {typeMeta.direction === "in" ? <ArrowDownLeft className="h-3.5 w-3.5" /> : <ArrowUpRight className="h-3.5 w-3.5" />}
                       {transaction.type}
                     </span>
                   </td>
                   <td className="px-5 py-4 font-bold text-white">{formatMoney(transaction.amount)}</td>
-                  <td className="px-5 py-4 font-mono text-xs text-[#8be9fd]">{transaction.referenceId.slice(0, 12)}...</td>
+                  <td className="px-5 py-4 font-mono text-xs text-[#8be9fd]">{truncateReference(transaction.referenceId)}</td>
                   <td className="px-5 py-4 text-[#a7b0c8]">{transaction.description ?? "No description"}</td>
                   <td className="px-5 py-4 text-[#a7b0c8]">{formatDate(transaction.createdAt)}</td>
                   <td className="px-5 py-4">
                     {transaction.receiptUrl ? (
                       <button
-                        onClick={() => void downloadReceipt(transaction.id)}
-                        disabled={downloadingId === transaction.id}
+                        onClick={() => void receiptDownload.downloadReceipt(transaction.id)}
+                        disabled={receiptDownload.downloadingId === transaction.id}
                         className="chip-btn inline-flex h-9 items-center gap-2 px-3 text-xs font-bold disabled:opacity-60"
                       >
-                        {downloadingId === transaction.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
+                        {receiptDownload.downloadingId === transaction.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
                         PDF
                       </button>
                     ) : (

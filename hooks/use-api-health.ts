@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { probeApiHealth } from "@/lib/services/health-api";
 
 type HealthState = "checking" | "connecting" | "ready" | "error";
 
@@ -21,9 +22,7 @@ export function useApiHealth(enabled = true) {
       setStatus(nextAttempt > 1 ? "connecting" : "checking");
 
       try {
-        const response = await fetch("/api/health", { credentials: "same-origin" });
-        const data = await response.json() as { ok?: boolean };
-        if (response.ok && data.ok) {
+        if (await probeApiHealth()) {
           setStatus("ready");
           setMessage("Ready");
           return;

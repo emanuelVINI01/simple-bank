@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import z from "zod";
 import { auth } from "@/auth";
-import { createLedgerPayment } from "@/lib/ledger";
+import { createLedgerPayment } from "@/lib/payment-service";
 
 const paymentSchema = z.object({
   paymentKey: z.string().uuid(),

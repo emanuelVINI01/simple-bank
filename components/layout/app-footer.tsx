@@ -17,9 +17,9 @@ export function AppFooter() {
           <div className="max-w-md">
             <Link href="/" className="inline-flex items-center gap-3 text-[var(--dracula-fg)]">
               <span className="relative h-10 w-10 overflow-hidden rounded-lg border border-[var(--dracula-purple)]/40">
-                <Image src="/brand-logo.png" alt="Transactional Wallet Ledger logo" fill sizes="40px" className="object-cover" />
+                <Image src="/brand-logo.png" alt="Simple Bank logo" fill sizes="40px" className="object-cover" />
               </span>
-              <span className="font-semibold tracking-tight">Transactional Wallet Ledger</span>
+              <span className="font-semibold tracking-tight">Simple Bank</span>
             </Link>
             <p className="mt-4 text-sm leading-relaxed">
               Technical fintech demo with protected auth, payment keys, ledger transactions, receipt downloads and mobile-first Dracula UI.
@@ -61,8 +61,8 @@ export function AppFooter() {
         </div>
 
         <div className="flex flex-col gap-3 border-t border-[var(--dracula-border)]/50 pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
-          <p>&copy; {new Date().getFullYear()} Transactional Wallet Ledger.</p>
-          <p>ACID-minded wallet demo</p>
+          <p>&copy; {new Date().getFullYear()} Simple Bank.</p>
+          <p>ACID-minded banking demo</p>
         </div>
       </div>
     </footer>

@@ -41,10 +41,10 @@ export function LandingPage() {
       <nav className="relative z-10 mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-5 sm:px-5 sm:py-6">
         <Link href="/" className="flex min-w-0 items-center gap-3">
           <span className="relative h-12 w-12 overflow-hidden rounded-2xl border border-white/10 shadow-lg shadow-purple-950/40">
-            <Image src="/brand-logo.png" alt="Transactional Wallet Ledger logo" fill sizes="48px" className="object-cover" priority />
+            <Image src="/brand-logo.png" alt="Simple Bank logo" fill sizes="48px" className="object-cover" priority />
           </span>
           <span className="min-w-0">
-            <span className="block text-sm font-bold text-white">Transactional Wallet Ledger</span>
+            <span className="block text-sm font-bold text-white">Simple Bank</span>
             <span className="hidden text-xs text-[#a7b0c8] sm:block">Production-style API demo</span>
           </span>
         </Link>
@@ -67,7 +67,7 @@ export function LandingPage() {
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link href="/register" className="btn-bet inline-flex h-13 items-center justify-center gap-2 px-6 text-sm font-bold">
-              Try the live ledger demo
+              Try the live bank demo
               <ArrowRight className="h-4 w-4" />
             </Link>
             <a href={githubUrl} target="_blank" rel="noreferrer" className="chip-btn inline-flex h-13 items-center justify-center gap-2 px-6 text-sm font-semibold">

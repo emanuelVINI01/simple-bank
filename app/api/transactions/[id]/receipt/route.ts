@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { generateReceiptPdf, publicUserSelect } from "@/lib/ledger";
+import { publicUserSelect } from "@/lib/ledger-selects";
 import { prisma } from "@/lib/prisma";
+import { generateReceiptPdf } from "@/lib/receipt-pdf";
 import { TransactionType } from "@prisma/client";
 
 type Params = {

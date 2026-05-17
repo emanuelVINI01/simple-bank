@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import z from "zod";
 import { prisma } from "@/lib/prisma";
-import { publicUser, publicUserSelect } from "@/lib/ledger";
+import { publicUser } from "@/lib/ledger-mappers";
+import { publicUserSelect } from "@/lib/ledger-selects";
 
 const registerSchema = z.object({
   name: z.string().trim().min(3).max(50),

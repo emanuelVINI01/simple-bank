@@ -19,9 +19,9 @@ export function AuthShell({
         <div className="hidden lg:block">
           <Link href="/" className="mb-10 inline-flex items-center gap-3">
             <span className="relative h-12 w-12 overflow-hidden rounded-2xl border border-white/10 shadow-lg shadow-purple-950/40">
-              <Image src="/brand-logo.png" alt="Transactional Wallet Ledger logo" fill sizes="48px" className="object-cover" />
+              <Image src="/brand-logo.png" alt="Simple Bank logo" fill sizes="48px" className="object-cover" />
             </span>
-            <span className="font-bold text-white">Transactional Wallet Ledger</span>
+            <span className="font-bold text-white">Simple Bank</span>
           </Link>
           <p className="text-sm font-bold uppercase tracking-[0.24em] text-[#8be9fd]">{eyebrow}</p>
           <h1 className="mt-4 max-w-xl text-5xl font-black leading-tight text-white">{title}</h1>
@@ -36,9 +36,9 @@ export function AuthShell({
         </div>
         <Link href="/" className="mb-2 inline-flex min-w-0 items-center gap-3 lg:hidden">
           <span className="relative h-10 w-10 overflow-hidden rounded-lg border border-[var(--dracula-purple)]/40 shadow-lg shadow-black/20">
-            <Image src="/brand-logo.png" alt="Transactional Wallet Ledger logo" fill sizes="40px" className="object-cover" />
+            <Image src="/brand-logo.png" alt="Simple Bank logo" fill sizes="40px" className="object-cover" />
           </span>
-          <span className="min-w-0 truncate font-bold text-white">Transactional Wallet Ledger</span>
+          <span className="min-w-0 truncate font-bold text-white">Simple Bank</span>
         </Link>
         <div className="glass-surface min-w-0 rounded-2xl p-4 sm:p-7">
           {children}

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowDownLeft, ArrowLeft, ArrowUpRight, FileText, Plus, ReceiptText } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { ApiWakeGate } from "@/components/layout/api-wake-gate";
 import { AppFooter } from "@/components/layout/app-footer";
 import { AppHeader } from "@/components/layout/app-header";
@@ -14,27 +14,16 @@ import { useRequireAuth } from "@/hooks/use-auth";
 import { useTransactions } from "@/hooks/use-transactions";
 import { useWallet } from "@/hooks/use-wallet";
 import { formatMoney } from "@/lib/format";
+import { summarizeTransactions } from "@/lib/transaction-mappers";
 
 export default function TransactionsPage() {
   const auth = useRequireAuth();
   const walletQuery = useWallet(Boolean(auth.token));
   const transactionsQuery = useTransactions(Boolean(auth.token));
   const [modalOpen, setModalOpen] = useState(false);
-  const transactions = useMemo(() => transactionsQuery.data ?? [], [transactionsQuery.data]);
+  const transactions = transactionsQuery.data ?? [];
   const user = walletQuery.data ?? auth.user;
-
-  const metrics = useMemo(() => {
-    const sent = transactions.filter((transaction) => transaction.type === "DEBIT").reduce((sum, transaction) => sum + transaction.amount, 0);
-    const received = transactions.filter((transaction) => transaction.type === "CREDIT").reduce((sum, transaction) => sum + transaction.amount, 0);
-    const receipts = transactions.filter((transaction) => Boolean(transaction.receiptUrl)).length;
-
-    return {
-      sent,
-      received,
-      receipts,
-      total: transactions.length,
-    };
-  }, [transactions]);
+  const metrics = summarizeTransactions(transactions);
 
   return (
     <ApiWakeGate>

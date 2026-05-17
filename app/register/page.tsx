@@ -9,9 +9,10 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { AuthShell } from "@/components/auth/auth-shell";
 import { ApiWakeGate } from "@/components/layout/api-wake-gate";
-import { ApiError, parseJsonResponse } from "@/lib/api-types";
+import { ApiError } from "@/lib/api-types";
 import { useAuth } from "@/hooks/use-auth";
 import { formatTaxId, onlyDigits } from "@/lib/format";
+import { registerUserRequest } from "@/lib/services/banking-api";
 
 const registerFormSchema = z.object({
   name: z.string().min(3).max(50),
@@ -46,20 +47,12 @@ export default function RegisterPage() {
 
   async function onSubmit(values: RegisterForm) {
     try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        credentials: "same-origin",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: values.name,
-          email: values.email,
-          taxId: onlyDigits(values.taxId),
-          password: values.password,
-        }),
+      await registerUserRequest({
+        name: values.name,
+        email: values.email,
+        taxId: onlyDigits(values.taxId),
+        password: values.password,
       });
-      await parseJsonResponse(response, "Unable to register demo user");
       await auth.login({ email: values.email, password: values.password });
       router.replace("/dashboard");
     } catch (error) {
