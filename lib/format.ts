@@ -1,9 +1,12 @@
-export function formatMoney(value?: number) {
+export function formatMoney(value?: number | null) {
+  const cents = Number.isFinite(value) ? Number(value) : 0;
+
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(value ?? 0);
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(cents / 100);
 }
 
 export function formatDate(value?: string) {

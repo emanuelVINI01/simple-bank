@@ -14,7 +14,7 @@ const resolveSchema = z.object({
 });
 
 const paySchema = z.object({
-  amount: z.number().int().positive("Amount must be greater than zero"),
+  amount: z.number().min(0.01, "Amount must be at least 0.01"),
   description: z.string().trim().max(255).optional(),
 });
 
@@ -64,12 +64,27 @@ export function useTransactionModal(open: boolean) {
     setStep(2);
   }
 
+  async function handleAiResolution(key: string, amount: number | null, description: string | null) {
+    resolveForm.setValue("key", key);
+    const paymentKey = await resolveMutation.mutateAsync(key);
+    setResolved(paymentKey);
+    if (amount !== null) {
+      payForm.setValue("amount", amount / 100);
+    }
+    if (description !== null) {
+      payForm.setValue("description", description);
+    }
+    setStep(2);
+  }
+
   async function confirmPayment(values: PayForm) {
     if (!resolved) return;
 
+    const amountInCents = Math.round(values.amount * 100);
+
     const response = await payMutation.mutateAsync({
       paymentKey: resolved.id,
-      amount: values.amount,
+      amount: amountInCents,
       description: values.description,
       idempotencyKey,
     });
@@ -111,5 +126,6 @@ export function useTransactionModal(open: boolean) {
     resolvePending: resolveMutation.isPending,
     resolved,
     step,
+    handleAiResolution,
   };
 }

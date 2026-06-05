@@ -4,115 +4,170 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import {
-  Activity,
   ArrowRight,
-  Database,
+  CheckCircle,
   Fingerprint,
-  GitBranch,
-  Home,
-  Layers3,
-  LockKeyhole,
-  LogIn,
+  Globe,
+  KeyRound,
   ReceiptText,
-  RefreshCcw,
   ShieldCheck,
   Sparkles,
-  UserPlus,
-  WalletCards,
+  TrendingUp,
+  Wallet,
+  Zap,
 } from "lucide-react";
 import { AppFooter } from "@/components/layout/app-footer";
+import { useI18n } from "@/src/i18n/provider";
 
-const stack = ["Next.js API routes", "Auth.js v5", "JWT sessions", "PostgreSQL", "Prisma", "TypeScript"];
-const githubUrl = process.env.NEXT_PUBLIC_GITHUB_URL ?? "https://github.com/emanuelVINI01";
-
-const hardProblems = [
-  { icon: Fingerprint, title: "Idempotent transactions", text: "Client-generated request identity prevents duplicate visual commits and models production retry safety." },
-  { icon: WalletCards, title: "Wallet ledger", text: "Debit and credit movements are stored as auditable ledger events instead of mutable balances only." },
-  { icon: LockKeyhole, title: "Transactional consistency", text: "Next.js route handlers coordinate Prisma transactions around balance checks, debit, credit and transaction creation." },
-  { icon: ReceiptText, title: "Auditability", text: "Each movement carries reference IDs, descriptions and timestamps for reconciliation-style inspection." },
-  { icon: RefreshCcw, title: "Reconciliation mindset", text: "The UI exposes sent, received, last activity and ledger health signals for operational review." },
-  { icon: ShieldCheck, title: "Auth.js JWT", text: "Protected flows use Auth.js v5 credentials, encrypted JWT sessions and the server-side AUTH_SECRET." },
+const featureIcons = [ShieldCheck, Zap, ReceiptText, Fingerprint, KeyRound, Sparkles];
+const featureColors = [
+  "text-[#50fa7b]",
+  "text-[#8be9fd]",
+  "text-[#bd93f9]",
+  "text-[#ff79c6]",
+  "text-[#f1fa8c]",
+  "text-[#ffb86c]",
+];
+const featureBg = [
+  "bg-[#50fa7b]/10 border-[#50fa7b]/20",
+  "bg-[#8be9fd]/10 border-[#8be9fd]/20",
+  "bg-[#bd93f9]/10 border-[#bd93f9]/20",
+  "bg-[#ff79c6]/10 border-[#ff79c6]/20",
+  "bg-[#f1fa8c]/10 border-[#f1fa8c]/20",
+  "bg-[#ffb86c]/10 border-[#ffb86c]/20",
 ];
 
+const featureKeys = [1, 2, 3, 4, 5, 6] as const;
+
+const socialStats = [
+  { value: "10k+", labelKey: "landing.social.users" as const },
+  { value: "R$ 0", labelKey: "landing.social.fee" as const },
+  { value: "99.9%", labelKey: "landing.social.uptime" as const },
+];
+
+const mockTransactions = [
+  { label: "CREDIT · ref_92b", color: "bg-[#50fa7b]", ago: "2m" },
+  { label: "DEBIT · ref_91a", color: "bg-[#ff79c6]", ago: "15m" },
+  { label: "CREDIT · ref_88c", color: "bg-[#50fa7b]", ago: "1h" },
+];
+
+function LangToggle() {
+  const { locale, setLocale } = useI18n();
+  return (
+    <button
+      className="lang-toggle"
+      onClick={() => setLocale(locale === "pt-BR" ? "en" : "pt-BR")}
+      aria-label="Toggle language"
+    >
+      <Globe className="h-3 w-3" />
+      {locale === "pt-BR" ? "EN" : "PT"}
+    </button>
+  );
+}
+
 export function LandingPage() {
+  const { t } = useI18n();
+
   return (
     <main className="relative min-h-screen overflow-hidden">
-      <div className="grid-noise pointer-events-none absolute inset-0 opacity-70" />
-      <nav className="relative z-10 mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-5 sm:px-5 sm:py-6">
+      <div className="grid-noise pointer-events-none absolute inset-0 opacity-80" />
+
+      {/* ─── Nav ─── */}
+      <nav className="relative z-20 mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-5 sm:px-6 sm:py-6">
         <Link href="/" className="flex min-w-0 items-center gap-3">
-          <span className="relative h-12 w-12 overflow-hidden rounded-2xl border border-white/10 shadow-lg shadow-purple-950/40">
-            <Image src="/brand-logo.png" alt="Simple Bank logo" fill sizes="48px" className="object-cover" priority />
+          <span className="relative h-10 w-10 overflow-hidden rounded-xl border border-white/10 shadow-lg shadow-purple-950/40">
+            <Image src="/brand-logo.png" alt="Simple Bank logo" fill sizes="40px" className="object-cover" priority />
           </span>
-          <span className="min-w-0">
-            <span className="block text-sm font-bold text-white">Simple Bank</span>
-            <span className="hidden text-xs text-[#a7b0c8] sm:block">Production-style API demo</span>
-          </span>
+          <span className="text-base font-bold text-white">{t("app.name")}</span>
         </Link>
         <div className="flex items-center gap-2">
-          <Link href="/login" className="chip-btn px-4 py-2 text-sm">Login</Link>
-          <Link href="/dashboard" className="btn-bet hidden px-5 py-2.5 text-sm font-bold sm:inline-flex">Open dashboard</Link>
+          <LangToggle />
+          <Link href="/login" className="chip-btn hidden px-4 py-2 text-sm sm:inline-flex">
+            {t("landing.nav.login")}
+          </Link>
+          <Link href="/register" className="btn-bet inline-flex h-9 items-center justify-center px-4 text-sm font-bold">
+            {t("landing.nav.register")}
+            <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+          </Link>
         </div>
       </nav>
 
-      <section className="relative z-10 mx-auto grid max-w-7xl gap-10 px-4 pb-20 pt-8 sm:px-5 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:pt-14">
-        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          <div className="chip-btn mb-6 inline-flex max-w-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#8be9fd] sm:tracking-[0.22em]">
-            Technical demo for full-stack reliability
+      {/* ─── Hero ─── */}
+      <section className="relative z-10 mx-auto grid max-w-7xl gap-12 px-4 pb-20 pt-8 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:pt-12 xl:pt-16">
+        <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65 }}>
+          <div className="hero-badge mb-6">
+            <CheckCircle className="h-3.5 w-3.5" />
+            {t("landing.hero.badge")}
           </div>
-          <h1 className="max-w-4xl text-4xl font-black leading-[1.02] text-white sm:text-6xl sm:leading-[0.95] lg:text-7xl">
-            A fintech-grade ledger app built inside one Next.js project.
+          <h1 className="max-w-2xl text-5xl font-black leading-[1.02] text-white sm:text-6xl lg:text-[68px] lg:leading-[0.96]">
+            {t("landing.hero.title")}
           </h1>
-          <p className="mt-6 max-w-2xl text-base leading-7 text-[#a7b0c8] sm:text-lg sm:leading-8">
-            This technical demo combines Auth.js v5, Prisma, local API route handlers, wallet balances, payment-like transfers and audit-friendly transactions in one deployable Next.js app.
+          <p className="mt-6 max-w-xl text-base leading-7 text-[#8892a4] sm:text-lg sm:leading-8">
+            {t("landing.hero.subtitle")}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link href="/register" className="btn-bet inline-flex h-13 items-center justify-center gap-2 px-6 text-sm font-bold">
-              Try the live bank demo
+            <Link
+              href="/register"
+              className="btn-bet inline-flex h-13 items-center justify-center gap-2 px-7 text-sm font-bold"
+            >
+              {t("landing.hero.cta.primary")}
               <ArrowRight className="h-4 w-4" />
             </Link>
-            <a href={githubUrl} target="_blank" rel="noreferrer" className="chip-btn inline-flex h-13 items-center justify-center gap-2 px-6 text-sm font-semibold">
-              View technical architecture
-              <GitBranch className="h-4 w-4" />
-            </a>
+            <Link
+              href="/login"
+              className="chip-btn inline-flex h-13 items-center justify-center gap-2 px-7 text-sm font-semibold"
+            >
+              {t("landing.hero.cta.secondary")}
+            </Link>
           </div>
-          <div className="mt-8 flex flex-wrap gap-2">
-            {stack.map((item) => (
-              <span key={item} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-[#f8f8f2]">
-                {item}
-              </span>
-            ))}
-          </div>
+          <p className="mt-5 text-xs text-[#8892a4]">{t("landing.hero.trust")}</p>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.1 }} className="gradient-ring rounded-2xl">
+        {/* ─── Dashboard Mockup ─── */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.94 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.7, delay: 0.15 }}
+          className="gradient-ring rounded-2xl"
+        >
           <div className="game-panel rounded-2xl p-5 sm:p-6">
             <div className="mb-5 flex items-center justify-between">
               <div>
-                <p className="text-xs uppercase tracking-[0.22em] text-[#8be9fd]">Live ledger mock</p>
-                <h2 className="mt-1 text-2xl font-bold text-white">Wallet control plane</h2>
-              </div>
-              <span className="rounded-full bg-[#50fa7b]/10 px-3 py-1 text-xs font-bold text-[#50fa7b]">healthy</span>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-3">
-              {[
-                ["Balance", "$12,840", "neon-text-green"],
-                ["Sent", "$4,210", "neon-text-pink"],
-                ["Received", "$8,630", "neon-text-cyan"],
-              ].map(([label, value, className]) => (
-                <div key={label} className="glass-surface rounded-xl p-4">
-                  <p className="text-xs text-[#a7b0c8]">{label}</p>
-                  <p className={`mt-2 text-2xl font-bold ${className}`}>{value}</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8be9fd]">
+                  {t("landing.mockup.label")}
+                </p>
+                <div className="mt-2 flex items-baseline gap-2">
+                  <span className="text-3xl font-black neon-text-green">$12,840.00</span>
+                  <TrendingUp className="h-4 w-4 text-[#50fa7b]" />
                 </div>
-              ))}
+              </div>
+              <span className="rounded-full bg-[#50fa7b]/10 px-3 py-1 text-xs font-bold text-[#50fa7b]">
+                {t("landing.mockup.status")}
+              </span>
             </div>
-            <div className="mt-4 space-y-3">
-              {["DEBIT reference_82a", "CREDIT reference_82a", "DEBIT retry-safe"].map((item, index) => (
-                <div key={item} className="flex items-center justify-between rounded-2xl border border-white/[0.06] bg-black/20 px-4 py-3">
+
+            <div className="mb-4 grid grid-cols-2 gap-3">
+              <div className="glass-surface rounded-xl p-4">
+                <p className="text-xs text-[#8892a4]">{t("landing.mockup.sent")}</p>
+                <p className="mt-1.5 text-xl font-bold neon-text-pink">$4,210.00</p>
+              </div>
+              <div className="glass-surface rounded-xl p-4">
+                <p className="text-xs text-[#8892a4]">{t("landing.mockup.received")}</p>
+                <p className="mt-1.5 text-xl font-bold neon-text-cyan">$8,630.00</p>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              {mockTransactions.map((tx) => (
+                <div
+                  key={tx.label}
+                  className="flex items-center justify-between rounded-xl border border-white/[0.05] bg-black/20 px-4 py-3"
+                >
                   <span className="flex items-center gap-3 text-sm text-[#f8f8f2]">
-                    <span className="h-2.5 w-2.5 rounded-full bg-[#8be9fd] shadow-[0_0_18px_rgba(0,229,255,0.9)]" />
-                    {item}
+                    <span className={`h-2 w-2 rounded-full ${tx.color} shadow-lg`} />
+                    {tx.label}
                   </span>
-                  <span className="text-xs text-[#a7b0c8]">T+{index + 1}</span>
+                  <span className="text-xs text-[#8892a4]">{tx.ago}</span>
                 </div>
               ))}
             </div>
@@ -120,76 +175,83 @@ export function LandingPage() {
         </motion.div>
       </section>
 
-      <section className="relative z-10 mx-auto max-w-7xl px-5 py-14">
-        <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <div>
-            <p className="text-sm font-bold uppercase tracking-[0.24em] text-[#ff79c6]">Built for API reliability</p>
-            <h2 className="mt-3 max-w-2xl text-3xl font-bold text-white sm:text-4xl">Hard problems surfaced as product UX.</h2>
+      {/* ─── Social Proof ─── */}
+      <section className="relative z-10 mx-auto max-w-7xl px-4 py-10 sm:px-6">
+        <div className="glass-surface rounded-2xl px-6 py-6">
+          <div className="grid grid-cols-3 gap-4 text-center">
+            {socialStats.map(({ value, labelKey }) => (
+              <div key={labelKey}>
+                <p className="text-2xl font-black text-white sm:text-3xl">{value}</p>
+                <p className="mt-1 text-xs text-[#8892a4]">{t(labelKey)}</p>
+              </div>
+            ))}
           </div>
-          <p className="max-w-md text-sm leading-6 text-[#a7b0c8]">The interface turns reliability concerns into visible states: authenticated sessions, retry-safe payments, ledger movement tables and audit-ready signals.</p>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {hardProblems.map((item, index) => (
-            <motion.article
-              key={item.title}
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ delay: index * 0.04 }}
-              className="glass-surface-2 rounded-xl p-5"
-            >
-              <item.icon className="mb-5 h-6 w-6 text-[#8be9fd]" />
-              <h3 className="text-lg font-bold text-white">{item.title}</h3>
-              <p className="mt-3 text-sm leading-6 text-[#a7b0c8]">{item.text}</p>
-            </motion.article>
-          ))}
         </div>
       </section>
 
-      <section className="relative z-10 mx-auto max-w-7xl px-5 pb-20 pt-8">
-        <div className="grid gap-4 lg:grid-cols-3">
-          {[
-            [Layers3, "Ledger-first architecture", "Moves are modeled as transaction rows with shared references for debit and credit sides."],
-            [Database, "What this demo proves", "The UI exposes auth, protected pages, payment-key resolution and transfer confirmation."],
-            [Sparkles, "Premium product finish", "The local API is presented with mobile-first forms, motion, protected states and operational empty screens."],
-          ].map(([Icon, title, text]) => (
-            <article key={String(title)} className="game-panel rounded-xl p-6">
-              <Icon className="h-7 w-7 text-[#f1fa8c]" />
-              <h3 className="mt-5 text-xl font-bold text-white">{String(title)}</h3>
-              <p className="mt-3 text-sm leading-6 text-[#a7b0c8]">{String(text)}</p>
-            </article>
-          ))}
+      {/* ─── Features ─── */}
+      <section className="relative z-10 mx-auto max-w-7xl px-4 py-14 sm:px-6">
+        <div className="mb-12 text-center">
+          <h2 className="text-3xl font-black text-white sm:text-4xl">{t("landing.features.title")}</h2>
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-[#8892a4]">{t("landing.features.subtitle")}</p>
         </div>
-        <div className="mt-10 flex flex-col items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5 sm:flex-row">
-          <span className="flex items-center gap-3 text-sm text-[#f8f8f2]">
-            <Activity className="h-5 w-5 text-[#50fa7b]" />
-            Duplicate requests do not create duplicate visual transactions in the client flow.
-          </span>
-          <Link href="/register" className="btn-cashout inline-flex h-12 items-center justify-center px-5 text-sm font-black">
-            Start demo
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {featureKeys.map((n, i) => {
+            const Icon = featureIcons[i]!;
+            return (
+              <motion.article
+                key={n}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ delay: i * 0.05 }}
+                className="glass-surface-2 hover-scale rounded-2xl p-6"
+              >
+                <div className={`mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border ${featureBg[i]}`}>
+                  <Icon className={`h-5 w-5 ${featureColors[i]}`} />
+                </div>
+                <h3 className="text-base font-bold text-white">{t(`landing.feature${n}.title`)}</h3>
+                <p className="mt-2 text-sm leading-6 text-[#8892a4]">{t(`landing.feature${n}.text`)}</p>
+              </motion.article>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ─── CTA Banner ─── */}
+      <section className="relative z-10 mx-auto max-w-7xl px-4 pb-24 sm:px-6">
+        <div className="balance-card p-8 text-center sm:p-12">
+          <Wallet className="mx-auto mb-4 h-10 w-10 neon-text-purple" />
+          <h2 className="text-3xl font-black text-white sm:text-4xl">{t("landing.cta.title")}</h2>
+          <p className="mx-auto mt-3 max-w-md text-sm text-[#8892a4]">{t("landing.cta.subtitle")}</p>
+          <Link
+            href="/register"
+            className="btn-bet mt-8 inline-flex h-13 items-center justify-center gap-2 px-8 text-sm font-black"
+          >
+            {t("landing.cta.button")}
+            <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </section>
+
+      {/* ─── Mobile Bottom Nav ─── */}
       <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--dracula-border)]/80 bg-[var(--dracula-bg)]/95 px-2 pb-[calc(env(safe-area-inset-bottom)+0.55rem)] pt-2 shadow-[0_-16px_34px_rgba(0,0,0,0.35)] backdrop-blur-xl lg:hidden">
-        <div className="mx-auto grid h-16 max-w-md grid-cols-3 items-stretch gap-1">
-          {[
-            { href: "/", label: "Home", icon: Home },
-            { href: "/login", label: "Login", icon: LogIn },
-            { href: "/register", label: "Register", icon: UserPlus },
-          ].map(({ href, icon: Icon, label }) => (
-            <Link
-              key={href}
-              href={href}
-              className="relative flex h-full min-w-0 flex-col items-center justify-between rounded-xl px-1 py-1.5 text-[10px] font-semibold uppercase tracking-tight text-[var(--dracula-comment)] transition-colors hover:text-[var(--dracula-cyan)]"
-            >
-              <span className="relative z-10 flex h-7 w-7 items-center justify-center rounded-lg text-[var(--dracula-comment)]">
-                <Icon className="h-4 w-4" />
-              </span>
-              <span className="relative z-10 block h-3 max-w-full truncate leading-3">{label}</span>
-            </Link>
-          ))}
+        <div className="mx-auto grid h-16 max-w-md grid-cols-2 items-stretch gap-2">
+          <Link
+            href="/login"
+            className="relative flex h-full min-w-0 flex-col items-center justify-center rounded-xl px-2 py-2 text-[10px] font-semibold text-[var(--dracula-comment)] transition-colors hover:text-[var(--dracula-cyan)]"
+          >
+            {t("landing.nav.login")}
+          </Link>
+          <Link
+            href="/register"
+            className="flex h-full items-center justify-center rounded-xl btn-bet text-sm font-bold"
+          >
+            {t("landing.nav.register")}
+          </Link>
         </div>
       </nav>
+
       <AppFooter />
     </main>
   );

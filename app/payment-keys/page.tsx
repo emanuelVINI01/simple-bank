@@ -29,17 +29,17 @@ export default function PaymentKeysPage() {
             <div>
               <Link href="/dashboard" className="chip-btn mb-5 inline-flex h-10 items-center gap-2 px-3 text-sm">
                 <ArrowLeft className="h-4 w-4" />
-                Back to dashboard
+                Voltar ao início
               </Link>
-              <p className="text-sm font-bold uppercase tracking-[0.24em] text-[#8be9fd]">Payment key vault</p>
-              <h1 className="mt-3 text-4xl font-black text-white sm:text-5xl">Your receivable keys</h1>
+              <p className="text-sm font-bold uppercase tracking-[0.24em] text-[#8be9fd]">Chaves de recebimento</p>
+              <h1 className="mt-3 text-4xl font-black text-white sm:text-5xl">Minhas chaves</h1>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-[#a7b0c8]">
-                These UUID keys are the pix-like identifiers another authenticated wallet uses to resolve your public user data before paying.
+                Suas chaves de recebimento permitem que outras pessoas te enviem dinheiro de forma rápida e segura. Compartilhe com quem for fazer uma transferência para você.
               </p>
             </div>
             <button onClick={keyActions.createPaymentKey} disabled={keyActions.createPending} className="btn-cashout flex h-13 items-center justify-center gap-2 px-6 text-sm font-black disabled:opacity-60">
               {keyActions.createPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
-              Generate key
+              Nova chave
             </button>
           </motion.section>
 

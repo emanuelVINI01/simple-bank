@@ -45,6 +45,7 @@ export function TransactionModal({
                   form={flow.resolveForm}
                   onSubmit={flow.resolveKey}
                   pending={flow.resolvePending}
+                  onAiResolve={flow.handleAiResolution}
                 />
               ) : null}
 

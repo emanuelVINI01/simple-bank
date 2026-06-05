@@ -53,7 +53,7 @@ export function createPaymentRequest(input: { paymentKey: string; amount: number
 }
 
 export function registerUserRequest(input: { email: string; name: string; password: string; taxId: string }) {
-  return requestJson("/api/auth/register", "Unable to register demo user", {
+  return requestJson("/api/auth/register", "Unable to register user", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

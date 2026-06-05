@@ -5,14 +5,14 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   title: "Simple Bank",
-  description: "Technical demo for a production-style simple banking ledger API.",
+  description: "Simple Bank - Your trusted digital banking platform for secure payments and instant transfers.",
   icons: {
     icon: "/brand-logo.png",
     apple: "/brand-logo.png",
   },
   openGraph: {
     title: "Simple Bank",
-    description: "Technical demo for a production-style simple banking ledger API.",
+    description: "Simple Bank - Your trusted digital banking platform for secure payments and instant transfers.",
     images: ["/brand-logo.png"],
   },
 };

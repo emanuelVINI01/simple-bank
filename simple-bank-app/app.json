@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "Simple Bank",
+    "slug": "simple-bank-app",
+    "version": "0.1.0",
+    "scheme": "simplebank",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#282a36"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.simplebank.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#282a36"
+      },
+      "package": "com.simplebank.app"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-notifications",
+        {
+          "color": "#bd93f9"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

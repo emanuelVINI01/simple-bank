@@ -23,6 +23,7 @@ model User {
   paymentsSent     Transaction[] @relation("TransactionPayer")
   paymentsReceived Transaction[] @relation("TransactionReceiver")
   paymentKeys      PaymentKey[]
+  aiUsageEvents    AiUsageEvent[]
 }
 
 model PaymentKey {
@@ -51,4 +52,28 @@ model Transaction {
 
   @@index([userId, createdAt])
   @@index([referenceId])
+}
+
+model AiTransactionAnalysis {
+  id          String         @id @default(uuid())
+  txnHash     String         @unique // SHA-256 hash of: payerId + receiverId + description + amount
+  model       String
+  result      Json           // Analysis results (category, friendly explanation, risk evaluation)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  usageEvents AiUsageEvent[]
+}
+
+model AiUsageEvent {
+  id        String                 @id @default(uuid())
+  userId    String
+  txnHash   String?
+  model     String
+  cacheHit  Boolean                @default(false)
+  createdAt DateTime               @default(now())
+  user      User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  analysis  AiTransactionAnalysis? @relation(fields: [txnHash], references: [txnHash], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([txnHash])
 }

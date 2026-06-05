@@ -1,72 +1,100 @@
 "use client";
 
-import { ArrowDownLeft, ArrowUpRight, Download, Loader2, ReceiptText } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, Download, Loader2, ReceiptText, Sparkles } from "lucide-react";
 import { useReceiptDownload } from "@/hooks/use-receipt-download";
 import type { ApiTransaction } from "@/lib/api-types";
 import { formatDate, formatMoney } from "@/lib/format";
 import { getTransactionTypeMeta, truncateReference } from "@/lib/transaction-mappers";
+import { useI18n } from "@/src/i18n/provider";
 
-export function TransactionTable({ transactions }: { transactions: ApiTransaction[] }) {
+export function TransactionTable({
+  transactions,
+  onAnalyzeClick,
+}: {
+  transactions: ApiTransaction[];
+  onAnalyzeClick?: (txn: ApiTransaction) => void;
+}) {
   const receiptDownload = useReceiptDownload();
+  const { t } = useI18n();
 
   if (transactions.length === 0) {
     return (
-      <div className="glass-surface-2 flex min-h-[280px] flex-col items-center justify-center rounded-xl p-8 text-center">
-        <ReceiptText className="mb-4 h-10 w-10 text-[#8be9fd]" />
-        <h3 className="text-xl font-bold text-white">No ledger movements yet</h3>
-        <p className="mt-2 max-w-sm text-sm leading-6 text-[#a7b0c8]">Create a payment key or send a transfer to start building an auditable transaction history.</p>
+      <div className="glass-surface-2 flex min-h-[280px] flex-col items-center justify-center rounded-2xl p-8 text-center border border-dashed border-white/10">
+        <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[#bd93f9]/10">
+          <ReceiptText className="h-8 w-8 text-[#bd93f9]" />
+        </div>
+        <h3 className="text-xl font-bold text-white">{t("transactions.empty")}</h3>
+        <p className="mt-2 max-w-sm text-sm leading-6 text-[#8892a4]">
+          {t("transactions.emptySubtitle")}
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="glass-surface-2 overflow-hidden rounded-xl">
-      <div className="border-b border-white/[0.06] px-5 py-4">
-        <h2 className="text-lg font-bold text-white">Ledger transactions</h2>
-        <p className="mt-1 text-sm text-[#a7b0c8]">Debit and credit rows returned by local Next.js API routes.</p>
-        {receiptDownload.error ? <p className="mt-2 text-sm text-[#ff79c6]">{receiptDownload.error}</p> : null}
-      </div>
+    <div className="glass-surface-2 overflow-hidden rounded-2xl">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[760px] text-left">
-          <thead className="bg-white/[0.03] text-xs uppercase tracking-[0.16em] text-[#a7b0c8]">
+          <thead className="bg-white/[0.03] text-[11px] font-bold uppercase tracking-[0.15em] text-[#8892a4]">
             <tr>
-              <th className="px-5 py-3">Type</th>
-              <th className="px-5 py-3">Amount</th>
-              <th className="px-5 py-3">Reference</th>
-              <th className="px-5 py-3">Description</th>
-              <th className="px-5 py-3">Created</th>
-              <th className="px-5 py-3">Receipt</th>
+              <th className="px-5 py-4">{t("transactions.type")}</th>
+              <th className="px-5 py-4">{t("transactions.amount")}</th>
+              <th className="px-5 py-4">{t("transactions.reference")}</th>
+              <th className="px-5 py-4">{t("transactions.description")}</th>
+              <th className="px-5 py-4">{t("transactions.date")}</th>
+              <th className="px-5 py-4 text-right">{t("transactions.receipt")}</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/[0.06]">
+          <tbody className="divide-y divide-white/[0.04]">
             {transactions.map((transaction) => {
               const typeMeta = getTransactionTypeMeta(transaction.type);
+              const isCredit = typeMeta.direction === "in";
+              const amountStr = formatMoney(transaction.amount);
 
               return (
-                <tr key={transaction.id} className="text-sm text-[#f8f8f2]">
+                <tr key={transaction.id} className="text-sm transition-colors hover:bg-white/[0.02]">
                   <td className="px-5 py-4">
-                    <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold ${typeMeta.className}`}>
-                      {typeMeta.direction === "in" ? <ArrowDownLeft className="h-3.5 w-3.5" /> : <ArrowUpRight className="h-3.5 w-3.5" />}
-                      {transaction.type}
+                    <span className={isCredit ? "badge-credit" : "badge-debit"}>
+                      {isCredit ? <ArrowDownLeft className="h-3.5 w-3.5" /> : <ArrowUpRight className="h-3.5 w-3.5" />}
+                      {isCredit ? t("transactions.credit") : t("transactions.debit")}
                     </span>
                   </td>
-                  <td className="px-5 py-4 font-bold text-white">{formatMoney(transaction.amount)}</td>
-                  <td className="px-5 py-4 font-mono text-xs text-[#8be9fd]">{truncateReference(transaction.referenceId)}</td>
-                  <td className="px-5 py-4 text-[#a7b0c8]">{transaction.description ?? "No description"}</td>
-                  <td className="px-5 py-4 text-[#a7b0c8]">{formatDate(transaction.createdAt)}</td>
+                  <td className={`px-5 py-4 font-black ${isCredit ? "text-[#50fa7b]" : "text-white"}`}>
+                    {isCredit ? "+" : "-"}{amountStr}
+                  </td>
                   <td className="px-5 py-4">
-                    {transaction.receiptUrl ? (
-                      <button
-                        onClick={() => void receiptDownload.downloadReceipt(transaction.id)}
-                        disabled={receiptDownload.downloadingId === transaction.id}
-                        className="chip-btn inline-flex h-9 items-center gap-2 px-3 text-xs font-bold disabled:opacity-60"
-                      >
-                        {receiptDownload.downloadingId === transaction.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
-                        PDF
-                      </button>
-                    ) : (
-                      <span className="text-xs text-[#a7b0c8]">-</span>
-                    )}
+                    <span className="rounded bg-black/20 px-2 py-1 font-mono text-[11px] text-[#8892a4]">
+                      {truncateReference(transaction.referenceId)}
+                    </span>
+                  </td>
+                  <td className="px-5 py-4 text-[#8892a4]">
+                    {transaction.description || <span className="italic opacity-60">{t("transactions.noDescription")}</span>}
+                  </td>
+                  <td className="px-5 py-4 text-[#8892a4]">{formatDate(transaction.createdAt)}</td>
+                  <td className="px-5 py-4 text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      {onAnalyzeClick && (
+                        <button
+                          onClick={() => onAnalyzeClick(transaction)}
+                          className="chip-btn inline-flex h-8 w-8 items-center justify-center text-[#bd93f9] hover:bg-[#bd93f9]/10 rounded-lg"
+                          title="Analyze with AI"
+                        >
+                          <Sparkles className="h-3.5 w-3.5" />
+                        </button>
+                      )}
+                      {transaction.receiptUrl ? (
+                        <button
+                          onClick={() => void receiptDownload.downloadReceipt(transaction.id)}
+                          disabled={receiptDownload.downloadingId === transaction.id}
+                          className="chip-btn inline-flex h-8 items-center justify-center gap-1.5 px-3 text-[11px] font-bold disabled:opacity-50"
+                        >
+                          {receiptDownload.downloadingId === transaction.id ? <Loader2 className="h-3 w-3 animate-spin" /> : <Download className="h-3 w-3" />}
+                          {t("transactions.download")}
+                        </button>
+                      ) : (
+                        <span className="text-[#8892a4] opacity-50">-</span>
+                      )}
+                    </div>
                   </td>
                 </tr>
               );

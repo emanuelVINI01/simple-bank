@@ -1,7 +1,10 @@
 "use client";
 
-import Link from "next/link";
-import { KeyRound } from "lucide-react";
+import QRCode from "qrcode";
+import { Copy, KeyRound, Loader2, Plus, QrCode } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { useI18n } from "@/src/i18n/provider";
+import { buildPaymentQrPayload, parseCurrencyToCents } from "@/lib/payment-qr";
 
 export function PaymentKeyPanel({
   error,
@@ -9,46 +12,129 @@ export function PaymentKeyPanel({
   onCreate,
   pending,
 }: {
-  error: unknown;
+  error: Error | null;
   lastKey: string | null;
-  onCreate: () => void;
+  onCreate: () => Promise<void>;
   pending: boolean;
 }) {
+  const { t } = useI18n();
+  const [copied, setCopied] = useState(false);
+  const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState("");
+  const [qrDataUrl, setQrDataUrl] = useState("");
+
+  const qrPayload = useMemo(() => {
+    if (!lastKey) return "";
+    return buildPaymentQrPayload({
+      amount: parseCurrencyToCents(amount),
+      description,
+      key: lastKey,
+    });
+  }, [amount, description, lastKey]);
+
+  useEffect(() => {
+    if (!qrPayload) {
+      return;
+    }
+
+    let active = true;
+    void QRCode.toDataURL(qrPayload, { margin: 2, width: 260 }).then((dataUrl) => {
+      if (active) setQrDataUrl(dataUrl);
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [qrPayload]);
+
+  function handleCopy() {
+    if (!lastKey) return;
+    void navigator.clipboard.writeText(lastKey);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
   return (
-    <div className="glass-surface-2 rounded-xl p-5">
-      <div className="mb-4 flex items-center justify-between">
+    <div className="game-panel rounded-2xl p-6 flex flex-col h-full">
+      <div className="flex items-center gap-3">
+        <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#f1fa8c]/15">
+          <KeyRound className="h-5 w-5 text-[#f1fa8c]" />
+        </span>
         <div>
-          <h2 className="text-xl font-bold text-white">Payment key</h2>
-          <p className="mt-1 text-sm text-[#a7b0c8]">Create a key for another demo account to pay you.</p>
+          <h2 className="text-xl font-black text-white">{t("keys.panel.title")}</h2>
+          <p className="text-xs text-[#8892a4] mt-0.5">{t("keys.panel.subtitle")}</p>
         </div>
-        <KeyRound className="h-6 w-6 text-[#8be9fd]" />
       </div>
-      {lastKey ? <NewKey keyValue={lastKey} /> : <NoSessionKey />}
-      <button onClick={onCreate} disabled={pending} className="btn-cashout mt-4 h-12 w-full text-sm font-black disabled:opacity-60">
-        {pending ? "Creating..." : "Generate payment key"}
+
+      <div className="mt-6 flex-1 flex flex-col justify-center">
+        {lastKey ? (
+          <div className="rounded-xl border border-[#f1fa8c]/20 bg-black/30 p-4">
+            <p className="font-mono text-sm break-all text-[#f1fa8c]">{lastKey}</p>
+            <button
+              onClick={handleCopy}
+              className="mt-4 flex w-full h-10 items-center justify-center gap-2 rounded-lg bg-[#f1fa8c]/10 text-sm font-bold text-[#f1fa8c] transition-colors hover:bg-[#f1fa8c]/20"
+            >
+              <Copy className="h-4 w-4" />
+              {copied ? t("common.copied") : t("common.copy")}
+            </button>
+            <div className="mt-4 rounded-xl border border-[#8be9fd]/15 bg-[#8be9fd]/5 p-4">
+              <div className="mb-3 flex items-center gap-2">
+                <QrCode className="h-4 w-4 text-[#8be9fd]" />
+                <p className="text-sm font-black text-white">QR para receber</p>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <label className="block">
+                  <span className="mb-1.5 block text-xs font-semibold text-[#8892a4]">Valor opcional</span>
+                  <input
+                    value={amount}
+                    onChange={(event) => setAmount(event.target.value)}
+                    className="input-neon h-10 px-3 text-sm"
+                    inputMode="decimal"
+                    placeholder="0,00"
+                  />
+                </label>
+                <label className="block">
+                  <span className="mb-1.5 block text-xs font-semibold text-[#8892a4]">Descricao opcional</span>
+                  <input
+                    value={description}
+                    onChange={(event) => setDescription(event.target.value)}
+                    className="input-neon h-10 px-3 text-sm"
+                    maxLength={255}
+                    placeholder="Ex: aluguel"
+                  />
+                </label>
+              </div>
+              {qrDataUrl ? (
+                <div className="mt-4 flex justify-center rounded-xl bg-white p-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={qrDataUrl} alt="QR Code Simple Bank para receber" className="h-48 w-48" />
+                </div>
+              ) : null}
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-white/10 bg-black/10 py-8">
+            <p className="text-sm font-medium text-[#8892a4]">{t("keys.panel.noKey")}</p>
+          </div>
+        )}
+      </div>
+
+      {error ? (
+        <p className="mt-4 text-xs text-[#ff5555]">{error.message}</p>
+      ) : null}
+
+      <button
+        onClick={() => void onCreate()}
+        disabled={pending}
+        className="chip-btn mt-5 flex h-12 w-full items-center justify-center gap-2 text-sm font-bold disabled:opacity-50"
+      >
+        {pending ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <Plus className="h-4 w-4" />
+        )}
+        {t("keys.panel.newKey")}
       </button>
-      <Link href="/payment-keys" className="chip-btn mt-3 flex h-12 items-center justify-center text-sm font-bold">
-        View all keys
-      </Link>
-      {error ? <p className="mt-3 text-sm text-[#ff79c6]">Could not create key. You may have reached the API limit.</p> : null}
-    </div>
-  );
-}
-
-function NewKey({ keyValue }: { keyValue: string }) {
-  return (
-    <div className="rounded-2xl border border-[#8be9fd]/20 bg-[#8be9fd]/[0.06] p-4">
-      <p className="text-xs uppercase tracking-[0.2em] text-[#a7b0c8]">New key</p>
-      <p className="mt-2 break-all font-mono text-sm text-[#8be9fd]">{keyValue}</p>
-      <p className="mt-2 text-xs text-[#a7b0c8]">Share this with another logged-in demo user.</p>
-    </div>
-  );
-}
-
-function NoSessionKey() {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-sm text-[#a7b0c8]">
-      No key generated in this browser session.
     </div>
   );
 }
