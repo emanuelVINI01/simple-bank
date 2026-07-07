@@ -5,7 +5,7 @@ import { createLedgerPayment } from "@/lib/payment-service";
 
 const paymentSchema = z.object({
   paymentKey: z.string().uuid(),
-  amount: z.number().int().positive(),
+  amount: z.number().int().positive().max(1_000_000_000, "Amount exceeds system limits"),
   description: z.string().trim().max(255).optional(),
 });
 
@@ -16,7 +16,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "Unauthorized." }, { status: 401 });
   }
 
-  const idempotencyKey = request.headers.get("idempotency-key") ?? crypto.randomUUID();
+  const idempotencyKey = request.headers.get("idempotency-key");
+  
+  if (!idempotencyKey || typeof idempotencyKey !== "string" || idempotencyKey.trim() === "") {
+    return NextResponse.json({ message: "Missing required 'idempotency-key' header." }, { status: 400 });
+  }
+
   const payload = await request.json().catch(() => null);
   const parsed = paymentSchema.safeParse(payload);
 

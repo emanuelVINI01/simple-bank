@@ -16,9 +16,8 @@ import { TransactionModal } from "@/components/modals/transaction-modal";
 import { TransactionAnalysisModal } from "@/components/modals/transaction-analysis-modal";
 import { TransactionTable } from "@/components/transactions/transaction-table";
 import { useRequireAuth } from "@/hooks/use-auth";
-import { useTransactions } from "@/hooks/use-transactions";
+import { useTransactions, useWalletMetrics } from "@/hooks/use-transactions";
 import { useCreatePaymentKey, usePaymentKeys, useWallet } from "@/hooks/use-wallet";
-import { summarizeTransactions } from "@/lib/transaction-mappers";
 import { useI18n } from "@/src/i18n/provider";
 import type { ApiTransaction } from "@/lib/api-types";
 
@@ -26,6 +25,7 @@ export default function DashboardPage() {
   const auth = useRequireAuth();
   const walletQuery = useWallet(Boolean(auth.token));
   const transactionsQuery = useTransactions(Boolean(auth.token));
+  const metricsQuery = useWalletMetrics(Boolean(auth.token));
   const paymentKeysQuery = usePaymentKeys(Boolean(auth.token));
   const createKey = useCreatePaymentKey();
   const [modalOpen, setModalOpen] = useState(false);
@@ -37,7 +37,12 @@ export default function DashboardPage() {
   const user = walletQuery.data ?? auth.user;
   const transactions = transactionsQuery.data ?? [];
   const activePaymentKey = lastKey ?? paymentKeysQuery.data?.[0]?.key ?? null;
-  const metrics = summarizeTransactions(transactions);
+  const metrics = metricsQuery.data ?? {
+    received: 0,
+    sent: 0,
+    total: 0,
+    last: undefined,
+  };
 
   async function createPaymentKey() {
     const key = await createKey.mutateAsync();

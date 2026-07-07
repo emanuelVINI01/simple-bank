@@ -22,58 +22,87 @@ type LedgerPaymentResult =
       error: string;
     };
 
-export async function createLedgerPayment(input: CreateLedgerPaymentInput): Promise<LedgerPaymentResult> {
-  const existingDebit = await findExistingDebit(input.payerId, input.idempotencyKey);
-
-  if (existingDebit) {
-    return paymentSuccess(existingDebit.id);
+class PaymentError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "PaymentError";
   }
+}
 
-  return prisma.$transaction(async (tx) => {
-    const paymentKey = await tx.paymentKey.findUnique({
-      where: { id: input.paymentKeyId },
-      select: {
-        user: {
-          select: publicUserSelect,
+export async function createLedgerPayment(input: CreateLedgerPaymentInput): Promise<LedgerPaymentResult> {
+  try {
+    return await prisma.$transaction(async (tx) => {
+      const existingDebit = await tx.transaction.findFirst({
+        where: {
+          userId: input.payerId,
+          referenceId: input.idempotencyKey,
+          type: TransactionType.DEBIT,
         },
-      },
+        select: { id: true },
+      });
+
+      if (existingDebit) {
+        return paymentSuccess(existingDebit.id);
+      }
+
+      const paymentKey = await tx.paymentKey.findUnique({
+        where: { id: input.paymentKeyId },
+        select: {
+          user: {
+            select: publicUserSelect,
+          },
+        },
+      });
+
+      if (!paymentKey) {
+        throw new PaymentError("Payment key not found.");
+      }
+
+      if (paymentKey.user.id === input.payerId) {
+        throw new PaymentError("You cannot pay yourself.");
+      }
+
+      const payer = await tx.user.findUnique({
+        where: { id: input.payerId },
+        select: publicUserSelect,
+      });
+
+      if (!payer) {
+        throw new PaymentError("Authenticated user not found.");
+      }
+
+      const debit = await debitPayer(tx, input.payerId, input.amount);
+
+      if (debit.count === 0) {
+        throw new PaymentError("Insufficient balance.");
+      }
+
+      await creditReceiver(tx, paymentKey.user.id, input.amount);
+
+      const debitTransaction = await createPairedTransactions(tx, {
+        amount: input.amount,
+        description: input.description,
+        idempotencyKey: input.idempotencyKey,
+        payerId: payer.id,
+        receiverId: paymentKey.user.id,
+      });
+
+      return paymentSuccess(debitTransaction.id);
     });
-
-    if (!paymentKey) {
-      return paymentFailure("Payment key not found.");
+  } catch (error) {
+    if (error instanceof PaymentError) {
+      return paymentFailure(error.message);
+    }
+    
+    // Unique constraint violation in Prisma (P2002) for idempotency key
+    if (typeof error === "object" && error !== null && "code" in error && error.code === "P2002") {
+      // It means another transaction inserted the same referenceId concurrently
+      // We can try to fetch it and return success, but falling back to generic error is also okay.
+      return paymentFailure("Concurrent request detected. Please try again or check your statement.");
     }
 
-    if (paymentKey.user.id === input.payerId) {
-      return paymentFailure("You cannot pay yourself.");
-    }
-
-    const payer = await tx.user.findUnique({
-      where: { id: input.payerId },
-      select: publicUserSelect,
-    });
-
-    if (!payer) {
-      return paymentFailure("Authenticated user not found.");
-    }
-
-    const debit = await debitPayer(tx, input.payerId, input.amount);
-
-    if (debit.count === 0) {
-      return paymentFailure("Insufficient balance.");
-    }
-
-    await creditReceiver(tx, paymentKey.user.id, input.amount);
-
-    const debitTransaction = await createPairedTransactions(tx, {
-      amount: input.amount,
-      description: input.description,
-      idempotencyKey: input.idempotencyKey,
-      payerId: payer.id,
-      receiverId: paymentKey.user.id,
-    });
-
-    return paymentSuccess(debitTransaction.id);
-  });
+    throw error;
+  }
 }
 
 function findExistingDebit(payerId: string, idempotencyKey: string) {

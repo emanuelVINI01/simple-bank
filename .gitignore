@@ -147,6 +147,4 @@ vite.config.ts.timestamp-*
 /generated/prisma
 
 # Generated transfer receipts
-transactional-wallet-ledger-api/data/*.pdf
-!transactional-wallet-ledger-api/data/.gitkeep
 .aider*

@@ -52,6 +52,7 @@ model Transaction {
 
   @@index([userId, createdAt])
   @@index([referenceId])
+  @@unique([userId, referenceId])
 }
 
 model AiTransactionAnalysis {

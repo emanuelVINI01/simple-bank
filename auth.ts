@@ -52,7 +52,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           name: user.name,
           email: user.email,
           taxId: user.taxId,
-          balance: user.balance,
           createdAt: user.createdAt.toISOString(),
         };
       },
@@ -63,7 +62,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       if (user) {
         token.id = user.id;
         token.taxId = user.taxId;
-        token.balance = user.balance;
         token.createdAt = user.createdAt;
       }
 
@@ -73,7 +71,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       if (session.user) {
         session.user.id = String(token.id);
         session.user.taxId = String(token.taxId);
-        session.user.balance = Number(token.balance ?? 0);
         session.user.createdAt = typeof token.createdAt === "string" ? token.createdAt : undefined;
       }
 

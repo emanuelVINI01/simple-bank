@@ -12,6 +12,18 @@ export function fetchTransactions(limit = 50) {
   return getJson<{ transactions: ApiTransaction[] }>(`/api/users/transactions?limit=${limit}`, "Could not load transactions.").then((data) => data.transactions);
 }
 
+export type WalletMetrics = {
+  sent: number;
+  received: number;
+  total: number;
+  receipts: number;
+  last?: string;
+};
+
+export function fetchWalletMetrics() {
+  return getJson<{ metrics: WalletMetrics }>("/api/users/metrics", "Could not load wallet metrics.").then((data) => data.metrics);
+}
+
 export function fetchPaymentKeys() {
   return getJson<{ paymentKeys: ApiPaymentKey[] }>("/api/payment-keys", "Could not load payment keys.").then((data) => data.paymentKeys);
 }
