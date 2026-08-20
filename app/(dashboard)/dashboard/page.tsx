@@ -10,8 +10,7 @@ import { LedgerChart } from "@/components/dashboard/ledger-chart";
 import { PaymentKeyPanel } from "@/components/dashboard/payment-key-panel";
 import { WalletIdentityPanel } from "@/components/dashboard/wallet-identity-panel";
 import { ApiWakeGate } from "@/components/layout/api-wake-gate";
-import { AppFooter } from "@/components/layout/app-footer";
-import { AppHeader } from "@/components/layout/app-header";
+
 import { TransactionModal } from "@/components/modals/transaction-modal";
 import { TransactionAnalysisModal } from "@/components/modals/transaction-analysis-modal";
 import { TransactionTable } from "@/components/transactions/transaction-table";
@@ -54,7 +53,6 @@ export default function DashboardPage() {
   return (
     <ApiWakeGate>
       <div className="min-h-screen">
-        <AppHeader />
         <main className="mx-auto max-w-7xl px-4 py-6 pb-12 sm:px-6 sm:py-8">
           <motion.section
             initial={{ opacity: 0, y: 18 }}
@@ -125,7 +123,6 @@ export default function DashboardPage() {
             </div>
           )}
         </main>
-        <AppFooter />
         <TransactionModal open={modalOpen} onClose={() => setModalOpen(false)} balance={user?.balance} />
         <TransactionAnalysisModal
           open={analysisOpen}

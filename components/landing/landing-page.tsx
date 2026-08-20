@@ -1,13 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
   CheckCircle,
   Fingerprint,
-  Globe,
   KeyRound,
   ReceiptText,
   ShieldCheck,
@@ -16,7 +14,6 @@ import {
   Wallet,
   Zap,
 } from "lucide-react";
-import { AppFooter } from "@/components/layout/app-footer";
 import { useI18n } from "@/src/i18n/provider";
 
 const featureIcons = [ShieldCheck, Zap, ReceiptText, Fingerprint, KeyRound, Sparkles];
@@ -51,19 +48,7 @@ const mockTransactions = [
   { label: "CREDIT · ref_88c", color: "bg-[#50fa7b]", ago: "1h" },
 ];
 
-function LangToggle() {
-  const { locale, setLocale } = useI18n();
-  return (
-    <button
-      className="lang-toggle"
-      onClick={() => setLocale(locale === "pt-BR" ? "en" : "pt-BR")}
-      aria-label="Toggle language"
-    >
-      <Globe className="h-3 w-3" />
-      {locale === "pt-BR" ? "EN" : "PT"}
-    </button>
-  );
-}
+
 
 export function LandingPage() {
   const { t } = useI18n();
@@ -71,26 +56,6 @@ export function LandingPage() {
   return (
     <main className="relative min-h-screen overflow-hidden">
       <div className="grid-noise pointer-events-none absolute inset-0 opacity-80" />
-
-      {/* ─── Nav ─── */}
-      <nav className="relative z-20 mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-5 sm:px-6 sm:py-6">
-        <Link href="/" className="flex min-w-0 items-center gap-3">
-          <span className="relative h-10 w-10 overflow-hidden rounded-xl border border-white/10 shadow-lg shadow-purple-950/40">
-            <Image src="/brand-logo.png" alt="Simple Bank logo" fill sizes="40px" className="object-cover" priority />
-          </span>
-          <span className="text-base font-bold text-white">{t("app.name")}</span>
-        </Link>
-        <div className="flex items-center gap-2">
-          <LangToggle />
-          <Link href="/login" className="chip-btn hidden px-4 py-2 text-sm sm:inline-flex">
-            {t("landing.nav.login")}
-          </Link>
-          <Link href="/register" className="btn-bet inline-flex h-9 items-center justify-center px-4 text-sm font-bold">
-            {t("landing.nav.register")}
-            <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-          </Link>
-        </div>
-      </nav>
 
       {/* ─── Hero ─── */}
       <section className="relative z-10 mx-auto grid max-w-7xl gap-12 px-4 pb-20 pt-8 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:pt-12 xl:pt-16">
@@ -233,26 +198,6 @@ export function LandingPage() {
           </Link>
         </div>
       </section>
-
-      {/* ─── Mobile Bottom Nav ─── */}
-      <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--dracula-border)]/80 bg-[var(--dracula-bg)]/95 px-2 pb-[calc(env(safe-area-inset-bottom)+0.55rem)] pt-2 shadow-[0_-16px_34px_rgba(0,0,0,0.35)] backdrop-blur-xl lg:hidden">
-        <div className="mx-auto grid h-16 max-w-md grid-cols-2 items-stretch gap-2">
-          <Link
-            href="/login"
-            className="relative flex h-full min-w-0 flex-col items-center justify-center rounded-xl px-2 py-2 text-[10px] font-semibold text-[var(--dracula-comment)] transition-colors hover:text-[var(--dracula-cyan)]"
-          >
-            {t("landing.nav.login")}
-          </Link>
-          <Link
-            href="/register"
-            className="flex h-full items-center justify-center rounded-xl btn-bet text-sm font-bold"
-          >
-            {t("landing.nav.register")}
-          </Link>
-        </div>
-      </nav>
-
-      <AppFooter />
     </main>
   );
 }

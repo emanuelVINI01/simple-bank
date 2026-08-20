@@ -301,7 +301,7 @@ button, a, input, textarea {
 /* ─── Buttons ─── */
 
 .btn-bet {
-  border-radius: 14px;
+  border-radius: 12px;
   background: linear-gradient(135deg, var(--dracula-purple), var(--dracula-pink) 62%, var(--dracula-cyan) 130%);
   color: var(--dracula-bg);
   box-shadow: 0 16px 40px rgba(189, 147, 249, 0.22), 0 0 28px rgba(255, 121, 198, 0.1);
@@ -320,7 +320,7 @@ button, a, input, textarea {
 }
 
 .btn-cashout {
-  border-radius: 14px;
+  border-radius: 12px;
   background: linear-gradient(135deg, var(--dracula-green), var(--dracula-cyan));
   color: var(--dracula-bg);
   box-shadow: 0 16px 40px rgba(80, 250, 123, 0.2);
@@ -342,7 +342,7 @@ button, a, input, textarea {
 
 .input-neon {
   width: 100%;
-  border-radius: 12px;
+  border-radius: 10px;
   border: 1px solid rgba(59, 61, 86, 0.85);
   background: rgba(20, 21, 33, 0.85);
   color: var(--foreground);

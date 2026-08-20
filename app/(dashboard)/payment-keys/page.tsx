@@ -4,8 +4,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft, Loader2, Plus } from "lucide-react";
 import { ApiWakeGate } from "@/components/layout/api-wake-gate";
-import { AppFooter } from "@/components/layout/app-footer";
-import { AppHeader } from "@/components/layout/app-header";
 import { EmptyPaymentKeys } from "@/components/payment-keys/empty-payment-keys";
 import { PaymentKeyCard } from "@/components/payment-keys/payment-key-card";
 import { PaymentKeySummary } from "@/components/payment-keys/payment-key-summary";
@@ -23,7 +21,6 @@ export default function PaymentKeysPage() {
   return (
     <ApiWakeGate>
       <div className="min-h-screen">
-        <AppHeader />
         <main className="mx-auto max-w-7xl px-4 py-6 pb-6 sm:px-6 sm:py-8">
           <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="mb-6 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
@@ -70,7 +67,6 @@ export default function PaymentKeysPage() {
             </section>
           )}
         </main>
-        <AppFooter />
       </div>
     </ApiWakeGate>
   );
