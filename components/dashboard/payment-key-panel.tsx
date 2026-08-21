@@ -38,7 +38,14 @@ export function PaymentKeyPanel({
     }
 
     let active = true;
-    void QRCode.toDataURL(qrPayload, { margin: 2, width: 260 }).then((dataUrl) => {
+    void QRCode.toDataURL(qrPayload, {
+      margin: 1,
+      width: 220,
+      color: {
+        dark: "#12131a",
+        light: "#ffffff",
+      },
+    }).then((dataUrl) => {
       if (active) setQrDataUrl(dataUrl);
     });
 
@@ -105,9 +112,14 @@ export function PaymentKeyPanel({
                 </label>
               </div>
               {qrDataUrl ? (
-                <div className="mt-4 flex justify-center rounded-xl bg-white p-3">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={qrDataUrl} alt="QR Code Simple Bank para receber" className="h-48 w-48" />
+                <div className="mt-4 flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-black/40 p-4 text-center">
+                  <div className="inline-flex items-center justify-center rounded-xl bg-white p-2.5 shadow-xl shadow-black/60">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={qrDataUrl} alt="QR Code Simple Bank para receber" className="h-44 w-44 rounded" />
+                  </div>
+                  <p className="mt-3 text-xs text-[#8892a4]">
+                    Escaneie para preencher a chave e transferir instantaneamente
+                  </p>
                 </div>
               ) : null}
             </div>

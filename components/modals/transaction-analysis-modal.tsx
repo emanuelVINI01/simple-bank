@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { AlertTriangle, CheckCircle, RefreshCw, X, ShieldAlert, Sparkles, HelpCircle } from "lucide-react";
 import { useEffect } from "react";
 import { useAnalyzeTransaction } from "@/hooks/use-ai";
+import { useEscapeKey } from "@/hooks/use-escape-key";
 import { useI18n } from "@/src/i18n/provider";
 import { formatMoney } from "@/lib/format";
 
@@ -26,6 +27,8 @@ export function TransactionAnalysisModal({
   const { t } = useI18n();
   const analyzeMutation = useAnalyzeTransaction();
   const { mutate } = analyzeMutation;
+
+  useEscapeKey(onClose, open && Boolean(transaction));
 
   useEffect(() => {
     if (open && transaction?.id) {
@@ -65,6 +68,11 @@ export function TransactionAnalysisModal({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            onClose();
+          }
+        }}
         className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 p-0 backdrop-blur-lg sm:items-center sm:p-4"
       >
         <motion.section
@@ -72,6 +80,7 @@ export function TransactionAnalysisModal({
           animate={{ y: 0, opacity: 1, scale: 1 }}
           exit={{ y: 16, opacity: 0, scale: 0.96 }}
           transition={{ type: "spring", stiffness: 260, damping: 28 }}
+          onClick={(e) => e.stopPropagation()}
           className="glass-surface max-h-[94dvh] w-full max-w-lg overflow-y-auto rounded-t-[26px] p-5 pb-[calc(env(safe-area-inset-bottom)+1rem)] sm:max-h-[88vh] sm:rounded-2xl sm:p-6"
         >
           {/* Header */}

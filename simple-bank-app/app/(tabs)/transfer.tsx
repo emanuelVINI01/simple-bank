@@ -10,7 +10,9 @@ import { PaymentAmountForm } from "@/components/transfer/PaymentAmountForm";
 import { TransferConfirm } from "@/components/transfer/TransferConfirm";
 import { TransferSuccess } from "@/components/transfer/TransferSuccess";
 import type { ParsedPaymentForm } from "@/validation/transfer";
+import { View } from "react-native";
 import { formatCentsForInput } from "@/lib/payment-qr";
+import { AiTransferInput } from "@/components/transfer/AiTransferInput";
 
 export default function TransferScreen() {
   const router = useRouter();
@@ -59,6 +61,21 @@ export default function TransferScreen() {
   if (flow.step === "resolve-key") {
     return (
       <Screen>
+        <View className="px-5 mt-5">
+          <AiTransferInput
+            onParsed={async (data) => {
+              if (data.recipientKey) {
+                await flow.resolveKey(data.recipientKey);
+                if (data.amount || data.description) {
+                  flow.setPaymentData({
+                    amount: data.amount ?? 0,
+                    description: data.description ?? "",
+                  });
+                }
+              }
+            }}
+          />
+        </View>
         <ResolveKeyForm
           onSubmit={handleResolveKey}
           onScanQr={() => router.push("/qr-scan")}

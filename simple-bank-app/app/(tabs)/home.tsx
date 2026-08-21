@@ -17,7 +17,9 @@ import { QuickActionRail, type QuickActionItem } from "@/components/home/QuickAc
 import { LatestTransactions } from "@/components/home/LatestTransactions";
 import { AccountCardPreview } from "@/components/home/AccountCardPreview";
 import { colors } from "@/theme/colors";
+import { View } from "react-native";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
+import { AiBudgetCard } from "@/components/home/AiBudgetCard";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -81,6 +83,10 @@ export default function HomeScreen() {
       />
 
       <QuickActionRail items={quickActions} />
+
+      <View className="px-5 mb-5">
+        <AiBudgetCard />
+      </View>
 
       <LatestTransactions
         items={items.slice(0, 5)}

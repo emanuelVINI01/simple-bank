@@ -40,7 +40,7 @@ export function PaymentQrSheet({ paymentKey, visible, onClose }: PaymentQrSheetP
           <IconButton icon={<X size={22} color={colors.fg} />} onPress={onClose} />
         </View>
 
-        <View className="gap-4 rounded-[24px] bg-dracula-surface p-4">
+        <View className="gap-4 rounded-[24px] bg-dracula-surface p-4 border border-dracula-card">
           <MoneyInput label="Valor opcional" value={amount} onChangeText={setAmount} />
           <Field
             label="Descricao opcional"
@@ -49,12 +49,14 @@ export function PaymentQrSheet({ paymentKey, visible, onClose }: PaymentQrSheetP
             placeholder="Ex: reembolso, aluguel..."
             returnKeyType="done"
           />
-          <View className="items-center rounded-[20px] bg-white p-4">
-            <QRCode value={payload} size={230} backgroundColor="#ffffff" color="#111111" />
+          <View className="items-center justify-center rounded-[20px] bg-dracula-surface-deep/80 border border-dracula-card/50 p-5">
+            <View className="rounded-[16px] bg-white p-2.5 shadow-lg shadow-black/60">
+              <QRCode value={payload} size={200} backgroundColor="#ffffff" color="#12131a" quietZone={4} />
+            </View>
+            <Text className="mt-3 text-center text-xs leading-5 text-dracula-muted">
+              Quem escanear este QR no Simple Bank tera a chave preenchida automaticamente.
+            </Text>
           </View>
-          <Text className="text-center text-xs leading-5 text-dracula-muted">
-            Quem escanear este QR no Simple Bank tera a chave preenchida automaticamente.
-          </Text>
         </View>
 
         <PrimaryButton title="Concluir" onPress={onClose} className="mt-5 bg-dracula-purple" />

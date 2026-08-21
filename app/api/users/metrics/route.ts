@@ -40,7 +40,7 @@ export async function GET() {
         last: lastTx?.createdAt?.toISOString() ?? undefined,
       }
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ message: "Failed to aggregate metrics." }, { status: 500 });
   }
 }

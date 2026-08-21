@@ -1,276 +1,104 @@
-# Simple Bank 🏦
+# Simple Bank
 
-> Mobile-first fintech banking demo built with Next.js 16, Auth.js v5, Prisma, PostgreSQL and an integrated AI assistant powered by Google Gemini.
+<p align="center">
+  <img src="images/web-dashboard.png" alt="Simple Bank Web Dashboard" width="800">
+</p>
 
-[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org/)
-[![Prisma](https://img.shields.io/badge/Prisma-7-2D3748?logo=prisma)](https://www.prisma.io/)
-[![Auth.js](https://img.shields.io/badge/Auth.js-v5-purple)](https://authjs.dev/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?logo=tailwindcss)](https://tailwindcss.com/)
-[![Vercel](https://img.shields.io/badge/Deploy-Vercel-black?logo=vercel)](https://vercel.com/)
+Um projeto de internet banking completo e moderno, focado na experiência do usuário e na arquitetura simplificada, porém robusta, contendo interface Web e Mobile (App), com integrações de inteligência artificial para auxiliar no dia a dia financeiro do usuário. 
 
----
+## 🚀 Funcionalidades
 
-## Overview
+O Simple Bank se destaca por oferecer funcionalidades bancárias tradicionais unidas a recursos de Inteligência Artificial:
 
-**Simple Bank** is a full-stack, single-repository Next.js application that simulates a mobile banking ledger. It demonstrates real-world patterns for authentication, protected API routes, double-entry bookkeeping, idempotent transfers, QR-code payment keys, authenticated PDF receipt generation and AI-powered transaction intelligence — all inside a single deployable Vercel project.
+- **Contas e Saldo**: Acompanhamento de saldo e extrato em tempo real.
+- **Transferências**: Envio de valores para outras chaves ou por Pix Copia e Cola / QR Code.
+- **Gerenciamento de Chaves**: Criação e gestão de chaves Pix para recebimentos rápidos.
+- **Análise Inteligente de Transações (IA)**:
+  - Avaliação de Risco: IA que pontua cada transação de 0 a 100, indicando transações atípicas e o nível de risco.
+  - Categorização Automática: Classificação de categorias e simplificação das descrições.
+  - Dicas Financeiras: Avaliações para otimizar os seus gastos baseados na movimentação específica.
+- **Consultor Financeiro (IA)**: Widget na tela inicial que analisa os últimos 30 dias de movimentações e oferece dicas personalizadas para economizar ou gerir o orçamento.
+- **Comando de Voz / Texto Livre para Transferência (IA)**: Escreva "transferir 50 reais para a chave email@teste.com referente a conta de luz" e o sistema já preenche o formulário para você.
 
-The UI follows the **Dracula** colour palette with glassmorphism panels, Framer Motion page transitions and a responsive bottom navigation for mobile users.
+<br>
+<p align="center">
+  <img src="images/mobile-home.png" alt="Mobile Home" width="260"> &nbsp; &nbsp; &nbsp;
+  <img src="images/mobile-transfer-qr.png" alt="Mobile Transfer AI" width="260">
+</p>
+<br>
 
----
+## 🛠️ Tecnologias e Arquitetura
 
-## Features
+O ecossistema é formado por dois frontends e uma API única unificada via Server Actions e Route Handlers (Next.js).
 
-- **Authentication** — Credentials provider via Auth.js v5, JWT sessions, `bcryptjs` password hashing, encrypted `AUTH_SECRET`.
-- **Dashboard** — Real-time balance, total sent/received, transaction count and last movement.
-- **Payment Keys** — Generate, list, copy and delete UUID-based receivable keys; QR code available per key.
-- **Two-Step Transfers** — Resolve payment key → confirm amount/description modal; idempotency key generated client-side and stored as `referenceId`.
-- **Double-Entry Ledger** — Debit and credit rows written atomically inside a Prisma transaction; balance updated in the same transaction.
-- **PDF Receipts** — Authenticated endpoint streams a generated PDF for any debit transaction owned by the session user.
-- **AI Banking Assistant** — Google Gemini integration for:
-  - Transaction categorisation and friendly explanations.
-  - Natural-language transfer intent parsing (`/api/ai/parse-transfer`).
-  - Budget advice based on the user's ledger history (`/api/ai/budget-advice`).
-  - AI usage event tracking with SHA-256 cache keying to avoid duplicate LLM calls.
-- **i18n** — Fully internationalised UI via a typed dictionary provider; no hardcoded labels in components.
-- **Mobile UX** — Fixed bottom navigation, responsive modals, Recharts ledger activity chart.
+### Web App & API (Next.js 15)
+- **Framework:** Next.js (App Router)
+- **Estilização:** TailwindCSS (Baseado no tema Dracula) e Radix UI (shadcn/ui adaptado).
+- **Gerenciamento de Estado:** React Query (@tanstack/react-query).
+- **Banco de Dados:** SQLite, manipulado com Prisma ORM.
+- **Autenticação:** Auth.js (NextAuth), usando sessões via JWT / Cookies.
+- **Inteligência Artificial:** AI SDK (Vercel) rodando com provedores como Google Generative AI (Gemini).
 
----
+### Mobile App (React Native + Expo)
+- **Framework:** Expo Router
+- **Estilização:** NativeWind (TailwindCSS para React Native).
+- **Integração:** `@tanstack/react-query` para consumir a API REST exposta pelo Next.js.
+- **Autenticação:** O Mobile app gerencia cookies de sessão localmente para se comunicar de forma transparente com as mesmas rotas autenticadas do Web App.
 
-## Tech Stack
+<br>
+<p align="center">
+  <img src="images/web-ledger-ai.png" alt="AI Transaction Ledger" width="800">
+</p>
+<br>
 
-| Layer | Technology |
-|---|---|
-| Framework | Next.js 16 (App Router) |
-| Language | TypeScript 5 |
-| Auth | Auth.js v5 / NextAuth beta — JWT strategy |
-| ORM | Prisma 7 + `@prisma/adapter-pg` |
-| Database | PostgreSQL |
-| AI | Google Gemini (`@google/genai`) |
-| State / Fetching | TanStack Query v5 |
-| Forms | React Hook Form + Zod |
-| Styling | Tailwind CSS 4 |
-| Animation | Framer Motion 12 |
-| Charts | Recharts |
-| Icons | Lucide React |
-| PDF | Custom receipt generator (`receipt-pdf.ts`) |
-| QR Codes | `qrcode` |
-| Testing | Vitest |
-| Deployment | Vercel |
+## 📦 Como rodar localmente
 
----
-
-## Architecture
-
-```
-simple-bank/
-├── app/                          # Next.js App Router — routes only, thin pages
-│   ├── api/
-│   │   ├── ai/
-│   │   │   ├── budget-advice/    # POST  — Gemini budget analysis
-│   │   │   ├── parse-transfer/   # POST  — NL → transfer intent
-│   │   │   ├── transaction/      # POST  — categorise & explain a transaction
-│   │   │   └── usage/            # GET   — AI usage stats for session user
-│   │   ├── auth/
-│   │   │   ├── [...nextauth]/    # Auth.js catch-all handler
-│   │   │   └── register/         # POST  — create account
-│   │   ├── health/               # GET   — liveness probe
-│   │   ├── payment-keys/         # GET, POST, DELETE /[key]
-│   │   ├── payments/             # POST  — execute transfer
-│   │   ├── transactions/
-│   │   │   └── [id]/receipt/     # GET   — stream PDF receipt
-│   │   └── users/
-│   │       ├── me/               # GET   — session user profile
-│   │       └── transactions/     # GET   — paginated ledger
-│   ├── dashboard/page.tsx
-│   ├── login/page.tsx
-│   ├── payment-keys/page.tsx
-│   ├── register/page.tsx
-│   ├── transactions/page.tsx
-│   ├── globals.css               # Dracula design tokens + Tailwind base
-│   ├── layout.tsx
-│   └── providers.tsx             # TanStack Query + i18n providers
-│
-├── components/                   # Pure rendering components
-│   ├── auth/                     # Login & register forms
-│   ├── dashboard/                # Balance card, stat cards, activity chart
-│   ├── landing/                  # Public landing page sections
-│   ├── layout/                   # AppHeader, AppFooter
-│   ├── modals/                   # Transfer modal (step 1 + step 2), key modal
-│   ├── payment-keys/             # Key list, key card, QR display
-│   ├── transactions/             # Ledger table, receipt button, AI insight
-│   └── ui/                       # Shared primitives (StatCard, …)
-│
-├── hooks/                        # React hooks — state, effects, API integration
-│   ├── use-ai.ts                 # AI endpoints + cache-aware fetching
-│   ├── use-auth.ts               # Register / login mutations
-│   ├── use-payment-key-actions.ts
-│   ├── use-payment.ts            # Transfer mutation
-│   ├── use-receipt-download.ts   # Blob download helper
-│   ├── use-transaction-modal.ts  # Two-step transfer state machine
-│   ├── use-transactions.ts       # Ledger query
-│   └── use-wallet.ts             # Balance & summary query
-│
-├── lib/                          # Business logic, services, mappers, utils
-│   ├── services/
-│   │   ├── ai-service.ts         # Gemini client, cache logic, usage tracking
-│   │   ├── banking-api.ts        # Client-side fetch wrappers for /api/*
-│   │   └── health-api.ts
-│   ├── ledger-mappers.ts         # Raw DB row → UI TransactionRow
-│   ├── ledger-selects.ts         # Prisma select shapes for ledger queries
-│   ├── payment-key-service.ts    # Payment key CRUD helpers
-│   ├── payment-qr.ts             # QR data-URL generation
-│   ├── payment-service.ts        # Transfer & balance update logic
-│   ├── receipt-pdf.ts            # PDF byte generation
-│   ├── receipt.ts                # Receipt data assembly
-│   ├── transaction-mappers.ts    # Transaction type formatters
-│   ├── user-service.ts           # User lookup helpers
-│   ├── format.ts                 # Currency / date formatters
-│   ├── prisma.ts                 # Singleton Prisma client
-│   ├── query-client.ts           # TanStack Query singleton
-│   └── api-types.ts              # Shared API request/response types
-│
-├── src/
-│   └── i18n/
-│       ├── dictionaries.ts       # Typed i18n dictionaries (pt-BR / en)
-│       └── provider.tsx          # i18n context provider
-│
-├── prisma/
-│   └── schema.prisma             # Data models (User, PaymentKey, Transaction, AI*)
-│
-├── auth.ts                       # Auth.js config — Credentials provider, JWT callbacks
-├── next-auth.d.ts                # Session type augmentation
-├── next.config.ts
-└── vercel.json
-```
-
-### Data Flow
-
-```
-Browser
-  └─► hooks/ (TanStack Query mutations/queries)
-        └─► lib/services/banking-api.ts  (fetch wrappers)
-              └─► app/api/*              (Next.js Route Handlers)
-                    ├─► lib/payment-service.ts / payment-key-service.ts / …
-                    │     └─► lib/prisma.ts  (Prisma client → PostgreSQL)
-                    └─► lib/services/ai-service.ts  (Google Gemini API)
-```
-
-### Key Design Decisions
-
-- **Single-repo, single Vercel project** — no micro-frontend split; API and UI deploy together.
-- **No external bearer tokens in the browser** — the session cookie from Auth.js is the only credential; API routes validate via `auth()`.
-- **Idempotent transfers** — clients generate a `referenceId` (UUID v4) before submission; the DB enforces `@@unique([userId, referenceId])` to prevent duplicate debits on retry.
-- **AI caching** — transaction analyses are keyed by a SHA-256 hash of `(payerId, receiverId, description, amount)` and stored in `AiTransactionAnalysis`; repeated requests hit the DB cache, not Gemini.
-- **Double-entry bookkeeping** — every transfer creates exactly one DEBIT row (payer's ledger) and one CREDIT row (receiver's ledger) inside a Prisma `$transaction`, keeping `balance` consistent.
-
----
-
-## Data Model
-
-```prisma
-User            → balance (Int, cents), email, taxId, passwordHash
-PaymentKey      → UUID key owned by a User
-Transaction     → DEBIT | CREDIT, userId, payerId, receiverId, referenceId
-AiTransactionAnalysis → txnHash (SHA-256), result (JSON), cached per unique transfer
-AiUsageEvent    → per-request log for usage analytics
-```
-
----
-
-## Environment Variables
-
-Create `.env.local` in the repository root:
-
-```env
-DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public"
-AUTH_SECRET="generate-a-long-random-secret"
-AUTH_URL="http://localhost:3000"
-NEXT_PUBLIC_GITHUB_URL="https://github.com/emanuelVINI01"
-GOOGLE_AI_API_KEY="your-gemini-api-key"
-```
-
-Generate a secure `AUTH_SECRET`:
-
+### 1. Clonando e preparando a base de dados
 ```bash
-openssl rand -base64 32
-```
+git clone https://github.com/emanuelVINI01/simple-bank.git
+cd simple-bank
 
-For Vercel, set the same variables in the project dashboard.
-
----
-
-## Getting Started
-
-```bash
-# 1. Install dependencies
+# Instale as dependências da Web/API
 npm install
 
-# 2. Push Prisma schema to your database
-npm run prisma:push
+# Copie o arquivo .env
+cp .env.example .env
 
-# 3. Start the development server
-npm run dev
+# Sincronize o banco de dados local com Prisma
+npx prisma db push
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+### 2. Configurando as Variáveis de Ambiente (`.env`)
+No arquivo `.env`, certifique-se de configurar:
+- `AUTH_SECRET`: Uma chave aleatória para assinar os tokens JWT (ex: `openssl rand -base64 32`).
+- `GOOGLE_GENERATIVE_AI_API_KEY`: Sua chave de API do Google Gemini para alimentar as funcionalidades de IA.
 
----
+### 3. Rodando o Servidor Web / API
+```bash
+npm run dev
+```
+O portal web e a API estarão disponíveis em `http://localhost:3000`.
 
-## Available Scripts
+### 4. Rodando o App Mobile
+Em um terminal separado:
+```bash
+cd simple-bank-app
 
-| Script | Description |
-|---|---|
-| `npm run dev` | Start development server |
-| `npm run build` | `prisma generate` + `next build` |
-| `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
-| `npm run test` | Run Vitest test suite |
-| `npm run prisma:generate` | Regenerate Prisma client |
-| `npm run prisma:push` | Push schema to database (dev) |
-| `npm run prisma:studio` | Open Prisma Studio |
+# Instale as dependências
+npm install
 
-> `npm run build` runs `prisma generate` before `next build` to keep Vercel builds in sync with the schema.
+# Inicie o empacotador do Expo
+npx expo start
+```
+No arquivo `.env` do App Mobile, aponte a URL da API para sua máquina local.
 
----
+## 🤝 Regras e Padrões de Projeto (AGENTS.md)
+Este projeto adere fortemente a arquiteturas limpas com foco em **Responsabilidade Única**:
+1. **Pages/Screens compõem** (layout e data fetching containers).
+2. **Components renderizam** (pequenos e fáceis de ler, com foco na UI).
+3. **Hooks controlam** (regras de negócio, integrações via react-query, estados isolados).
+4. **i18n** é obrigatório: nenhum texto de interface deve estar *hardcoded* nos componentes (incluindo Mobile).
+5. O padrão de cores acompanha fielmente o modelo **Dracula** original, sem desvios para bibliotecas padrão ou bibliotecas UI genéricas.
 
-## API Surface
-
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `GET` | `/api/health` | — | Liveness probe |
-| `POST` | `/api/auth/register` | — | Create account |
-| `GET\|POST` | `/api/auth/[...nextauth]` | — | Auth.js handler |
-| `GET` | `/api/users/me` | ✅ | Session user profile |
-| `GET` | `/api/users/transactions` | ✅ | Paginated ledger |
-| `GET` | `/api/payment-keys` | ✅ | List payment keys |
-| `POST` | `/api/payment-keys` | ✅ | Create payment key |
-| `GET` | `/api/payment-keys/:key` | — | Resolve key → owner |
-| `DELETE` | `/api/payment-keys/:key` | ✅ | Delete payment key |
-| `POST` | `/api/payments` | ✅ | Execute transfer |
-| `GET` | `/api/transactions/:id/receipt` | ✅ | Stream PDF receipt |
-| `POST` | `/api/ai/parse-transfer` | ✅ | NL → transfer intent |
-| `POST` | `/api/ai/transaction` | ✅ | Categorise transaction |
-| `POST` | `/api/ai/budget-advice` | ✅ | Budget analysis |
-| `GET` | `/api/ai/usage` | ✅ | AI usage stats |
-
----
-
-## Deployment
-
-Deploy the repository root to Vercel:
-
-| Setting | Value |
-|---|---|
-| Framework Preset | `Next.js` |
-| Build Command | `npm run build` |
-| Install Command | `npm install` |
-| Output Directory | `.next` |
-
-Use a hosted PostgreSQL database (e.g. Vercel Postgres, Neon, Supabase) and add all environment variables in the Vercel dashboard.
-
----
-
-## License
-
-No open-source license is declared yet.
+## 📄 Licença
+Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.

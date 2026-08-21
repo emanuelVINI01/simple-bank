@@ -35,7 +35,7 @@ describe("payment-service", () => {
         },
       };
 
-      vi.mocked(prisma.$transaction).mockImplementation(async (callback: any) => {
+      vi.mocked(prisma.$transaction).mockImplementation(async (callback: (tx: unknown) => Promise<unknown>) => {
         return callback(mockTx);
       });
 
@@ -75,7 +75,7 @@ describe("payment-service", () => {
         },
       };
 
-      vi.mocked(prisma.$transaction).mockImplementation(async (callback: any) => {
+      vi.mocked(prisma.$transaction).mockImplementation(async (callback: (tx: unknown) => Promise<unknown>) => {
         return callback(mockTx);
       });
 
@@ -96,7 +96,7 @@ describe("payment-service", () => {
       const mockTx = {
         transaction: {
           findFirst: vi.fn().mockResolvedValue(null),
-          create: vi.fn().mockImplementation((args: any) => {
+          create: vi.fn().mockImplementation((args: { data: { type: string } }) => {
             if (args.data.type === "DEBIT") return Promise.resolve({ id: "new-debit-tx" });
             return Promise.resolve({ id: "new-credit-tx" });
           }),
@@ -111,7 +111,7 @@ describe("payment-service", () => {
         },
       };
 
-      vi.mocked(prisma.$transaction).mockImplementation(async (callback: any) => {
+      vi.mocked(prisma.$transaction).mockImplementation(async (callback: (tx: unknown) => Promise<unknown>) => {
         return callback(mockTx);
       });
 

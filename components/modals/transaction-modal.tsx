@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { useEscapeKey } from "@/hooks/use-escape-key";
 import { useTransactionModal } from "@/hooks/use-transaction-modal";
 import { ConfirmPaymentStep } from "@/components/modals/transaction-confirm-step";
 import { TransactionModalHeader, StepProgress } from "@/components/modals/transaction-modal-shell";
@@ -18,6 +19,16 @@ export function TransactionModal({
 }) {
   const flow = useTransactionModal(open);
 
+  const handleBackOrClose = () => {
+    if (flow.step === 2) {
+      flow.goToResolveStep();
+    } else {
+      onClose();
+    }
+  };
+
+  useEscapeKey(handleBackOrClose, open);
+
   return (
     <AnimatePresence>
       {open ? (
@@ -25,6 +36,11 @@ export function TransactionModal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              handleBackOrClose();
+            }
+          }}
           className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 p-0 backdrop-blur-lg sm:items-center sm:p-4"
         >
           <motion.section
@@ -32,6 +48,7 @@ export function TransactionModal({
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: 16, opacity: 0, scale: 0.96 }}
             transition={{ type: "spring", stiffness: 260, damping: 28 }}
+            onClick={(e) => e.stopPropagation()}
             className="glass-surface max-h-[94dvh] w-full max-w-lg overflow-y-auto rounded-t-[26px] p-4 pb-[calc(env(safe-area-inset-bottom)+1rem)] sm:max-h-[88vh] sm:rounded-2xl sm:p-6"
           >
             <TransactionModalHeader onClose={onClose} />

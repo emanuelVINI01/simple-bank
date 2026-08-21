@@ -32,14 +32,7 @@ class PaymentError extends Error {
 export async function createLedgerPayment(input: CreateLedgerPaymentInput): Promise<LedgerPaymentResult> {
   try {
     return await prisma.$transaction(async (tx) => {
-      const existingDebit = await tx.transaction.findFirst({
-        where: {
-          userId: input.payerId,
-          referenceId: input.idempotencyKey,
-          type: TransactionType.DEBIT,
-        },
-        select: { id: true },
-      });
+      const existingDebit = await findExistingDebit(tx, input.payerId, input.idempotencyKey);
 
       if (existingDebit) {
         return paymentSuccess(existingDebit.id);
@@ -105,8 +98,8 @@ export async function createLedgerPayment(input: CreateLedgerPaymentInput): Prom
   }
 }
 
-function findExistingDebit(payerId: string, idempotencyKey: string) {
-  return prisma.transaction.findFirst({
+function findExistingDebit(tx: Prisma.TransactionClient, payerId: string, idempotencyKey: string) {
+  return tx.transaction.findFirst({
     where: {
       userId: payerId,
       referenceId: idempotencyKey,

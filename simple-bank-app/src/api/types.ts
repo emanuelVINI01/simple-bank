@@ -73,3 +73,38 @@ export type CsrfPayload = {
   csrfToken: string;
 };
 
+export type AiUsageSummary = {
+  used: number;
+  cacheHits: number;
+  totalRequests: number;
+  limit: number;
+  remaining: number;
+  periodStart: string;
+  periodEnd: string;
+};
+
+export type TransactionAnalysis = {
+  category: string;
+  friendlyDescription: string;
+  riskScore: number;
+  riskLevel: "low" | "medium" | "high";
+  riskExplanation: string;
+  budgetTip: string;
+};
+
+export type BudgetAdvice = {
+  summary: string;
+  recommendations: string[];
+  categoryBreakdown: {
+    category: string;
+    percentage: number;
+    totalCents: number;
+  }[];
+};
+
+export type ParsedTransfer = {
+  recipientKey: string | null;
+  amount: number | null;
+  description: string | null;
+};
+
