@@ -24,8 +24,8 @@ export function DashboardInsights() {
     <div className="grid gap-4 sm:grid-cols-2">
       {insights.map((item) => (
         <article key={item.title} className="glass-surface-2 rounded-xl p-5">
-          <h3 className="text-lg font-bold text-white">{item.title}</h3>
-          <p className="mt-3 text-sm leading-6 text-[#a7b0c8]">{item.text}</p>
+          <h3 className="text-lg font-bold text-[var(--fg)]">{item.title}</h3>
+          <p className="mt-3 text-sm leading-6 text-[var(--fg-muted)]">{item.text}</p>
         </article>
       ))}
     </div>

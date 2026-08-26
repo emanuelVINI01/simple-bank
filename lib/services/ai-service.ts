@@ -1,6 +1,15 @@
 import { createHash } from "crypto";
 import { GoogleGenAI } from "@google/genai";
+import z from "zod";
 import { prisma } from "@/lib/prisma";
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+const parsedTransferSchema = z.object({
+  recipientKey: z.string().trim().min(1).max(120).nullable().catch(null),
+  amount: z.number().int().nonnegative().max(1_000_000_000).nullable().catch(null),
+  description: z.string().trim().max(255).nullable().catch(null),
+});
 
 const DEFAULT_AI_DAILY_LIMIT = 50;
 const DEFAULT_GEMINI_MODEL = "gemini-2.5-flash";
@@ -387,7 +396,17 @@ class AiService {
       },
     });
 
-    const result = JSON.parse(response.text ?? "{}");
+    const rawResult: unknown = JSON.parse(response.text ?? "{}");
+    const parsed = parsedTransferSchema.safeParse(rawResult);
+    const result = parsed.success
+      ? parsed.data
+      : { recipientKey: null, amount: null, description: null };
+
+    // The model may return a person's name instead of a payment key UUID.
+    // Resolve it to that user's first payment key so the client can prefill the transfer.
+    if (result.recipientKey && !UUID_RE.test(result.recipientKey)) {
+      result.recipientKey = await this.resolvePaymentKeyByName(result.recipientKey, userId);
+    }
 
     await this.recordUsageEvent({
       userId,
@@ -397,9 +416,29 @@ class AiService {
     });
 
     return {
-      result: result as { recipientKey: string | null; amount: number | null; description: string | null },
+      result,
       usage: await this.getUsageSummary(userId),
     };
+  }
+
+  private async resolvePaymentKeyByName(name: string, excludeUserId: string): Promise<string | null> {
+    const targetUser = await prisma.user.findFirst({
+      where: {
+        name: {
+          contains: name,
+          mode: "insensitive",
+        },
+        // Don't allow transferring to oneself by name resolution
+        id: { not: excludeUserId },
+      },
+      include: {
+        paymentKeys: {
+          take: 1,
+        },
+      },
+    });
+
+    return targetUser?.paymentKeys[0]?.key ?? null;
   }
 
   async generateBudgetAdvice(userId: string, locale: "pt-BR" | "en") {

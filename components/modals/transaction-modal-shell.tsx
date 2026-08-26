@@ -11,7 +11,7 @@ export function TransactionModalHeader({ onClose }: { onClose: () => void }) {
   return (
     <div className="mb-6 flex items-start justify-between gap-3">
       <div>
-        <h2 className="text-xl font-black text-white sm:text-2xl">{t("transfer.title")}</h2>
+        <h2 className="text-xl font-bold text-[var(--fg)] sm:text-2xl">{t("transfer.title")}</h2>
       </div>
       <button onClick={onClose} className="chip-btn flex h-10 w-10 items-center justify-center" aria-label={t("common.close")}>
         <X className="h-5 w-5" />
@@ -47,7 +47,7 @@ export function StepPanel({ children }: { children: ReactNode }) {
 
 export function ErrorBox({ message }: { message: string }) {
   return (
-    <div className="rounded-2xl border border-[#ff79c6]/30 bg-[#ff79c6]/10 px-4 py-3 text-sm text-[#ff79c6]">
+    <div className="rounded-2xl border border-[var(--error)]/30 bg-[var(--error)]/10 px-4 py-3 text-sm text-[var(--error)]">
       {message}
     </div>
   );

@@ -28,20 +28,20 @@ export default function PaymentKeysPage() {
                 <ArrowLeft className="h-4 w-4" />
                 Voltar ao início
               </Link>
-              <p className="text-sm font-bold uppercase tracking-[0.24em] text-[#8be9fd]">Chaves de recebimento</p>
-              <h1 className="mt-3 text-4xl font-black text-white sm:text-5xl">Minhas chaves</h1>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-[#a7b0c8]">
+              <p className="text-sm font-bold uppercase tracking-[0.24em] text-[var(--info)]">Chaves de recebimento</p>
+              <h1 className="mt-3 text-4xl font-bold tracking-tight text-[var(--fg)] sm:text-5xl">Minhas chaves</h1>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--fg-muted)]">
                 Suas chaves de recebimento permitem que outras pessoas te enviem dinheiro de forma rápida e segura. Compartilhe com quem for fazer uma transferência para você.
               </p>
             </div>
-            <button onClick={keyActions.createPaymentKey} disabled={keyActions.createPending} className="btn-cashout flex h-13 items-center justify-center gap-2 px-6 text-sm font-black disabled:opacity-60">
+            <button onClick={keyActions.createPaymentKey} disabled={keyActions.createPending} className="btn-secondary-cta flex h-13 items-center justify-center gap-2 px-6 text-sm font-bold disabled:opacity-60">
               {keyActions.createPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
               Nova chave
             </button>
           </motion.section>
 
           {keyActions.feedback ? (
-            <div className="mb-6 rounded-2xl border border-[#8be9fd]/25 bg-[#8be9fd]/[0.07] px-4 py-3 text-sm text-[#B8F6FF]">
+            <div className="mb-6 rounded-xl border border-[var(--info)]/25 bg-[var(--info)]/[0.07] px-4 py-3 text-sm text-[var(--info)]">
               {keyActions.feedback}
             </div>
           ) : null}

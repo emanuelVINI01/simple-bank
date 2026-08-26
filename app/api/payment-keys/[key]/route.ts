@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { publicPaymentKey } from "@/lib/ledger-mappers";
-import { paymentKeySelect } from "@/lib/ledger-selects";
-import { prisma } from "@/lib/prisma";
+import { deletePaymentKeyForUser, findPaymentKeyByKeyOrId } from "@/lib/payment-key-service";
 
 type Params = {
   params: Promise<{ key: string }>;
@@ -16,15 +15,7 @@ export async function GET(_request: Request, { params }: Params) {
   }
 
   const { key } = await params;
-  const paymentKey = await prisma.paymentKey.findFirst({
-    where: {
-      OR: [
-        { key },
-        { id: key },
-      ],
-    },
-    select: paymentKeySelect,
-  });
+  const paymentKey = await findPaymentKeyByKeyOrId(key);
 
   if (!paymentKey) {
     return NextResponse.json({ message: "Payment key not found." }, { status: 404 });
@@ -41,17 +32,9 @@ export async function DELETE(_request: Request, { params }: Params) {
   }
 
   const { key } = await params;
-  const deleted = await prisma.paymentKey.deleteMany({
-    where: {
-      userId: session.user.id,
-      OR: [
-        { key },
-        { id: key },
-      ],
-    },
-  });
+  const deleted = await deletePaymentKeyForUser(session.user.id, key);
 
-  if (deleted.count === 0) {
+  if (!deleted) {
     return NextResponse.json({ message: "Payment key not found." }, { status: 404 });
   }
 

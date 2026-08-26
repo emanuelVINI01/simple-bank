@@ -1,34 +1,53 @@
+"use client";
+
+import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
+
+const tones = {
+  accent: {
+    bg: "bg-[var(--accent)]/10",
+    text: "text-[var(--accent)]",
+  },
+  info: {
+    bg: "bg-[var(--info)]/10",
+    text: "text-[var(--info)]",
+  },
+  warning: {
+    bg: "bg-[var(--warning)]/10",
+    text: "text-[var(--warning)]",
+  },
+  muted: {
+    bg: "bg-[var(--fg-subtle)]/10",
+    text: "text-[var(--fg-subtle)]",
+  },
+} as const;
+
+export type StatTone = keyof typeof tones;
 
 export function StatCard({
   icon: Icon,
   label,
   value,
-  tone = "cyan",
+  tone = "info",
 }: {
   icon: LucideIcon;
   label: string;
   value: string;
-  tone?: "cyan" | "green" | "pink" | "purple" | "yellow";
+  tone?: StatTone;
 }) {
-  const tones = {
-    cyan: "text-[#8be9fd]",
-    green: "text-[#50fa7b]",
-    pink: "text-[#ff79c6]",
-    purple: "text-[#bd93f9]",
-    yellow: "text-[#f1fa8c]",
-  };
+  const { bg, text } = tones[tone];
 
   return (
-    <article className="glass-surface-2 hover-scale rounded-xl p-5">
-      <div className="mb-5 flex items-center justify-between">
-        <span className="rounded-2xl border border-white/10 bg-white/[0.04] p-3">
-          <Icon className={`h-5 w-5 ${tones[tone]}`} />
-        </span>
-        <span className="h-2 w-2 rounded-full bg-[#50fa7b] shadow-[0_0_18px_rgba(0,255,163,0.8)]" />
-      </div>
-      <p className="text-sm text-[#a7b0c8]">{label}</p>
-      <p className="mt-2 text-2xl font-semibold text-white">{value}</p>
-    </article>
+    <motion.article
+      whileHover={{ y: -3 }}
+      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+      className="glass-surface-2 rounded-xl p-5"
+    >
+      <span className={`inline-flex h-10 w-10 items-center justify-center rounded-xl ${bg}`}>
+        <Icon className={`h-5 w-5 ${text}`} />
+      </span>
+      <p className="mt-4 text-3xl font-bold tracking-tight text-[var(--fg)]">{value}</p>
+      <p className="mt-1 text-xs font-semibold uppercase tracking-widest text-[var(--fg-subtle)]">{label}</p>
+    </motion.article>
   );
 }

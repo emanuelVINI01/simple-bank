@@ -27,16 +27,16 @@ export function PaymentKeyCard({
     >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#ff79c6]">Receivable key</p>
-          <p className="mt-3 break-all font-mono text-sm text-[#8be9fd]">{paymentKey.key}</p>
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--info)]">Receivable key</p>
+          <p className="mt-3 break-all font-mono text-sm text-[var(--info)]">{paymentKey.key}</p>
         </div>
-        <span className="inline-flex w-fit items-center gap-2 rounded-full bg-[#50fa7b]/10 px-3 py-1 text-xs font-bold text-[#50fa7b]">
+        <span className="inline-flex w-fit items-center gap-2 rounded-full bg-[var(--accent)]/10 px-3 py-1 text-xs font-bold text-[var(--accent)]">
           <ShieldCheck className="h-3.5 w-3.5" />
           active
         </span>
       </div>
 
-      <div className="mt-5 grid gap-3 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-[#a7b0c8] sm:grid-cols-2">
+      <div className="mt-5 grid gap-3 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-[var(--fg-muted)] sm:grid-cols-2">
         <span>Owner: {paymentKey.user.name}</span>
         <span>Tax ID: {formatTaxId(paymentKey.user.taxId)}</span>
         <span className="sm:col-span-2">Created: {formatDate(paymentKey.createdAt)}</span>
@@ -50,7 +50,7 @@ export function PaymentKeyCard({
         <button
           onClick={() => void onDelete(paymentKey.key)}
           disabled={deleting}
-          className="flex h-12 items-center justify-center gap-2 rounded-2xl border border-[#ff79c6]/35 bg-[#ff79c6]/10 px-4 text-sm font-bold text-[#ff79c6] transition hover:bg-[#ff79c6]/20 disabled:opacity-60"
+          className="flex h-12 items-center justify-center gap-2 rounded-xl border border-[var(--error)]/35 bg-[var(--error)]/10 px-4 text-sm font-bold text-[var(--error)] transition hover:bg-[var(--error)]/20 disabled:opacity-60"
         >
           {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
           Delete

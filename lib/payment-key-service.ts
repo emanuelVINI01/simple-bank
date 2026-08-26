@@ -16,3 +16,31 @@ export async function createPaymentKey(userId: string) {
     select: paymentKeySelect,
   });
 }
+
+export function listPaymentKeys(userId: string) {
+  return prisma.paymentKey.findMany({
+    where: { userId },
+    orderBy: { createdAt: "desc" },
+    select: paymentKeySelect,
+  });
+}
+
+export function findPaymentKeyByKeyOrId(keyOrId: string) {
+  return prisma.paymentKey.findFirst({
+    where: {
+      OR: [{ key: keyOrId }, { id: keyOrId }],
+    },
+    select: paymentKeySelect,
+  });
+}
+
+export async function deletePaymentKeyForUser(userId: string, keyOrId: string) {
+  const deleted = await prisma.paymentKey.deleteMany({
+    where: {
+      userId,
+      OR: [{ key: keyOrId }, { id: keyOrId }],
+    },
+  });
+
+  return deleted.count > 0;
+}

@@ -11,8 +11,8 @@ export function PaymentKeySummary({ ownerTaxId, totalKeys }: { ownerTaxId: strin
 function MetricCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="glass-surface-2 rounded-xl p-5">
-      <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#a7b0c8]">{label}</p>
-      <p className="mt-3 break-all text-xl font-black text-white">{value}</p>
+      <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--fg-muted)]">{label}</p>
+      <p className="mt-3 break-all text-xl font-bold text-[var(--fg)]">{value}</p>
     </div>
   );
 }

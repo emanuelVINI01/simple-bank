@@ -35,13 +35,11 @@ export function summarizeTransactions(transactions: ApiTransaction[]) {
 export function getTransactionTypeMeta(type: ApiTransaction["type"]) {
   if (type === "CREDIT") {
     return {
-      className: "bg-[#50fa7b]/10 text-[#50fa7b]",
       direction: "in" as const,
     };
   }
 
   return {
-    className: "bg-[#ff79c6]/10 text-[#ff79c6]",
     direction: "out" as const,
   };
 }

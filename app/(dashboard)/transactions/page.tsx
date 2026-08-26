@@ -38,38 +38,38 @@ export default function TransactionsPage() {
                 <ArrowLeft className="h-4 w-4" />
                 Voltar ao início
               </Link>
-              <p className="text-sm font-bold uppercase tracking-[0.24em] text-[#8be9fd]">Histórico financeiro</p>
-              <h1 className="mt-3 text-4xl font-black text-white sm:text-5xl">Extrato</h1>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-[#a7b0c8]">
+              <p className="text-sm font-bold uppercase tracking-[0.24em] text-[var(--info)]">Histórico financeiro</p>
+              <h1 className="mt-3 text-4xl font-bold tracking-tight text-[var(--fg)] sm:text-5xl">Extrato</h1>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--fg-muted)]">
                 Acompanhe todas as suas movimentações financeiras. Débitos e créditos com comprovantes disponíveis para download.
               </p>
             </div>
-            <button onClick={() => setModalOpen(true)} className="btn-bet flex h-13 items-center justify-center gap-2 px-6 text-sm font-black">
+            <button onClick={() => setModalOpen(true)} className="btn-primary-cta flex h-13 items-center justify-center gap-2 px-6 text-sm font-bold">
               <Plus className="h-4 w-4" />
               Nova transferência
             </button>
           </motion.section>
 
           <section className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <StatCard icon={ReceiptText} label="Total de operações" value={String(metrics.total)} tone="purple" />
-            <StatCard icon={ArrowUpRight} label="Total enviado" value={formatMoney(metrics.sent)} tone="pink" />
-            <StatCard icon={ArrowDownLeft} label="Total recebido" value={formatMoney(metrics.received)} tone="cyan" />
-            <StatCard icon={FileText} label="Comprovantes" value={String(metrics.receipts)} tone="green" />
+            <StatCard icon={ReceiptText} label="Total de operações" value={String(metrics.total)} tone="info" />
+            <StatCard icon={ArrowUpRight} label="Total enviado" value={formatMoney(metrics.sent)} tone="muted" />
+            <StatCard icon={ArrowDownLeft} label="Total recebido" value={formatMoney(metrics.received)} tone="accent" />
+            <StatCard icon={FileText} label="Comprovantes" value={String(metrics.receipts)} tone="accent" />
           </section>
 
           <section className="mb-6 grid gap-4 lg:grid-cols-[0.8fr_1.2fr]">
             <div className="game-panel rounded-xl p-5">
-              <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#ff79c6]">Conta</p>
-              <h2 className="mt-3 text-2xl font-black text-white">{user?.name ?? "Carregando..."}</h2>
-              <p className="mt-2 text-sm text-[#a7b0c8]">{user?.email ?? ""}</p>
+              <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--info)]">Conta</p>
+              <h2 className="mt-3 text-2xl font-bold text-[var(--fg)]">{user?.name ?? "Carregando..."}</h2>
+              <p className="mt-2 text-sm text-[var(--fg-muted)]">{user?.email ?? ""}</p>
               <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4">
-                <p className="text-xs text-[#a7b0c8]">Saldo disponível</p>
-                <p className="mt-2 text-3xl font-black text-[#50fa7b]">{formatMoney(user?.balance)}</p>
+                <p className="text-xs text-[var(--fg-muted)]">Saldo disponível</p>
+                <p className="mt-2 text-3xl font-bold text-[var(--accent)]">{formatMoney(user?.balance)}</p>
               </div>
             </div>
             <div className="glass-surface-2 rounded-xl p-5">
-              <h2 className="text-xl font-bold text-white">Comprovantes</h2>
-              <p className="mt-3 text-sm leading-6 text-[#a7b0c8]">
+              <h2 className="text-xl font-bold text-[var(--fg)]">Comprovantes</h2>
+              <p className="mt-3 text-sm leading-6 text-[var(--fg-muted)]">
                 Todos os comprovantes das suas transações ficam disponíveis para download diretamente pelo extrato. Acesso exclusivo e seguro vinculado à sua conta.
               </p>
               <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -107,9 +107,9 @@ export default function TransactionsPage() {
 
 function InfoPill({ text, title }: { text: string; title: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-      <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8be9fd]">{title}</p>
-      <p className="mt-2 text-sm text-[#f8f8f2]">{text}</p>
+    <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
+      <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--info)]">{title}</p>
+      <p className="mt-2 text-sm text-[var(--fg)]">{text}</p>
     </div>
   );
 }

@@ -62,36 +62,36 @@ export function PaymentKeyPanel({
   }
 
   return (
-    <div className="game-panel rounded-2xl p-6 flex flex-col h-full">
+    <div className="game-panel rounded-xl p-6 flex flex-col h-full">
       <div className="flex items-center gap-3">
-        <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#f1fa8c]/15">
-          <KeyRound className="h-5 w-5 text-[#f1fa8c]" />
+        <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--info)]/15">
+          <KeyRound className="h-5 w-5 text-[var(--info)]" />
         </span>
         <div>
-          <h2 className="text-xl font-black text-white">{t("keys.panel.title")}</h2>
-          <p className="text-xs text-[#8892a4] mt-0.5">{t("keys.panel.subtitle")}</p>
+          <h2 className="text-xl font-bold text-[var(--fg)]">{t("keys.panel.title")}</h2>
+          <p className="text-xs text-[var(--fg-subtle)] mt-0.5">{t("keys.panel.subtitle")}</p>
         </div>
       </div>
 
       <div className="mt-6 flex-1 flex flex-col justify-center">
         {lastKey ? (
-          <div className="rounded-xl border border-[#f1fa8c]/20 bg-black/30 p-4">
-            <p className="font-mono text-sm break-all text-[#f1fa8c]">{lastKey}</p>
+          <div className="rounded-xl border border-[var(--info)]/20 bg-black/30 p-4">
+            <p className="font-mono text-sm break-all text-[var(--info)]">{lastKey}</p>
             <button
               onClick={handleCopy}
-              className="mt-4 flex w-full h-10 items-center justify-center gap-2 rounded-lg bg-[#f1fa8c]/10 text-sm font-bold text-[#f1fa8c] transition-colors hover:bg-[#f1fa8c]/20"
+              className="mt-4 flex w-full h-10 items-center justify-center gap-2 rounded-lg bg-[var(--info)]/10 text-sm font-bold text-[var(--info)] transition-colors hover:bg-[var(--info)]/20"
             >
               <Copy className="h-4 w-4" />
               {copied ? t("common.copied") : t("common.copy")}
             </button>
-            <div className="mt-4 rounded-xl border border-[#8be9fd]/15 bg-[#8be9fd]/5 p-4">
+            <div className="mt-4 rounded-xl border border-[var(--info)]/15 bg-[var(--info)]/5 p-4">
               <div className="mb-3 flex items-center gap-2">
-                <QrCode className="h-4 w-4 text-[#8be9fd]" />
-                <p className="text-sm font-black text-white">QR para receber</p>
+                <QrCode className="h-4 w-4 text-[var(--info)]" />
+                <p className="text-sm font-bold text-[var(--fg)]">QR para receber</p>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
                 <label className="block">
-                  <span className="mb-1.5 block text-xs font-semibold text-[#8892a4]">Valor opcional</span>
+                  <span className="mb-1.5 block text-xs font-semibold text-[var(--fg-subtle)]">Valor opcional</span>
                   <input
                     value={amount}
                     onChange={(event) => setAmount(event.target.value)}
@@ -101,7 +101,7 @@ export function PaymentKeyPanel({
                   />
                 </label>
                 <label className="block">
-                  <span className="mb-1.5 block text-xs font-semibold text-[#8892a4]">Descricao opcional</span>
+                  <span className="mb-1.5 block text-xs font-semibold text-[var(--fg-subtle)]">Descricao opcional</span>
                   <input
                     value={description}
                     onChange={(event) => setDescription(event.target.value)}
@@ -117,7 +117,7 @@ export function PaymentKeyPanel({
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={qrDataUrl} alt="QR Code Simple Bank para receber" className="h-44 w-44 rounded" />
                   </div>
-                  <p className="mt-3 text-xs text-[#8892a4]">
+                  <p className="mt-3 text-xs text-[var(--fg-subtle)]">
                     Escaneie para preencher a chave e transferir instantaneamente
                   </p>
                 </div>
@@ -126,13 +126,13 @@ export function PaymentKeyPanel({
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-white/10 bg-black/10 py-8">
-            <p className="text-sm font-medium text-[#8892a4]">{t("keys.panel.noKey")}</p>
+            <p className="text-sm font-medium text-[var(--fg-subtle)]">{t("keys.panel.noKey")}</p>
           </div>
         )}
       </div>
 
       {error ? (
-        <p className="mt-4 text-xs text-[#ff5555]">{error.message}</p>
+        <p className="mt-4 text-xs text-[var(--error)]">{error.message}</p>
       ) : null}
 
       <button

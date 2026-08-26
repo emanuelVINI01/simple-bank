@@ -60,19 +60,19 @@ export default function DashboardPage() {
             className="mb-8 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end"
           >
             <div>
-              <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#8be9fd]">
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-[var(--info)]">
                 {t("dashboard.title")}
               </p>
-              <h1 className="mt-2 text-4xl font-black text-white sm:text-5xl">
+              <h1 className="mt-2 text-4xl font-bold tracking-tight text-[var(--fg)] sm:text-5xl">
                 {t("dashboard.greeting", { name: firstName })}
               </h1>
-              <p className="mt-3 max-w-xl text-sm leading-6 text-[#8892a4]">
+              <p className="mt-3 max-w-xl text-sm leading-6 text-[var(--fg-subtle)]">
                 {t("dashboard.subtitle")}
               </p>
             </div>
             <button
               onClick={() => setModalOpen(true)}
-              className="btn-bet flex h-14 items-center justify-center gap-2 px-8 text-sm font-black w-full sm:w-auto"
+              className="btn-primary-cta flex h-14 items-center justify-center gap-2 px-8 text-sm font-bold w-full sm:w-auto"
             >
               <Plus className="h-5 w-5" />
               {t("dashboard.newTransfer")}
@@ -107,7 +107,7 @@ export default function DashboardPage() {
           ) : (
             <div className="space-y-4 mt-8">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-white">{t("dashboard.transactions")}</h2>
+                <h2 className="text-xl font-bold text-[var(--fg)]">{t("dashboard.transactions")}</h2>
                 <Link href="/transactions" className="chip-btn inline-flex h-10 items-center gap-2 px-4 text-sm font-bold">
                   {t("dashboard.openLedger")}
                   <ArrowRight className="h-4 w-4" />

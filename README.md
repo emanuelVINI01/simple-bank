@@ -4,21 +4,23 @@
   <img src="images/web-dashboard.png" alt="Simple Bank Web Dashboard" width="800">
 </p>
 
-Um projeto de internet banking completo e moderno, focado na experiência do usuário e na arquitetura simplificada, porém robusta, contendo interface Web e Mobile (App), com integrações de inteligência artificial para auxiliar no dia a dia financeiro do usuário. 
+A modern, full-stack digital banking demo focused on user experience and a simple but robust architecture. It ships a Web app (Next.js) and a companion Mobile app (Expo), sharing a single unified API, and layers in Google Gemini-powered AI features for everyday financial tasks: per-transaction risk scoring, spend categorization, a personal budget advisor, and natural-language transfer parsing.
 
-## 🚀 Funcionalidades
+This is a personal portfolio project, not a production service — there's no real money movement behind it, and the "why this project" pitch below is about what the codebase actually does, not manufactured adoption numbers.
 
-O Simple Bank se destaca por oferecer funcionalidades bancárias tradicionais unidas a recursos de Inteligência Artificial:
+## Features
 
-- **Contas e Saldo**: Acompanhamento de saldo e extrato em tempo real.
-- **Transferências**: Envio de valores para outras chaves ou por Pix Copia e Cola / QR Code.
-- **Gerenciamento de Chaves**: Criação e gestão de chaves Pix para recebimentos rápidos.
-- **Análise Inteligente de Transações (IA)**:
-  - Avaliação de Risco: IA que pontua cada transação de 0 a 100, indicando transações atípicas e o nível de risco.
-  - Categorização Automática: Classificação de categorias e simplificação das descrições.
-  - Dicas Financeiras: Avaliações para otimizar os seus gastos baseados na movimentação específica.
-- **Consultor Financeiro (IA)**: Widget na tela inicial que analisa os últimos 30 dias de movimentações e oferece dicas personalizadas para economizar ou gerir o orçamento.
-- **Comando de Voz / Texto Livre para Transferência (IA)**: Escreva "transferir 50 reais para a chave email@teste.com referente a conta de luz" e o sistema já preenche o formulário para você.
+Simple Bank combines traditional banking primitives with a handful of genuinely useful AI features:
+
+- **Accounts & Balance**: Real-time balance and statement tracking.
+- **Transfers**: Send money to a payment key, or via a Pix-style copy-paste code / QR code.
+- **Key Management**: Create and manage payment keys for fast, secure receiving.
+- **AI Transaction Analysis**:
+  - Risk Scoring: a model scores every transaction from 0 to 100, flagging atypical activity.
+  - Auto-Categorization: transactions are classified into spending categories with a simplified, friendly description.
+  - Financial Tips: short, targeted suggestions based on the specific movement.
+- **AI Financial Advisor**: a dashboard widget that reviews the last 30 days of activity and suggests ways to save or budget better.
+- **Natural-Language Transfers (AI)**: type something like "transfer 50 reais to email@test.com for the electric bill" and the app parses it into a pre-filled transfer.
 
 <br>
 <p align="center">
@@ -27,23 +29,20 @@ O Simple Bank se destaca por oferecer funcionalidades bancárias tradicionais un
 </p>
 <br>
 
-## 🛠️ Tecnologias e Arquitetura
+## Tech Stack & Architecture
 
-O ecossistema é formado por dois frontends e uma API única unificada via Server Actions e Route Handlers (Next.js).
+The project is made up of two frontends sharing a single API, unified via Next.js Route Handlers.
 
-### Web App & API (Next.js 15)
-- **Framework:** Next.js (App Router)
-- **Estilização:** TailwindCSS (Baseado no tema Dracula) e Radix UI (shadcn/ui adaptado).
-- **Gerenciamento de Estado:** React Query (@tanstack/react-query).
-- **Banco de Dados:** SQLite, manipulado com Prisma ORM.
-- **Autenticação:** Auth.js (NextAuth), usando sessões via JWT / Cookies.
-- **Inteligência Artificial:** AI SDK (Vercel) rodando com provedores como Google Generative AI (Gemini).
+### Web App & API (Next.js)
+- **Framework:** Next.js 16 (App Router)
+- **Styling:** Tailwind CSS with a fully hand-built UI — no component library (no Radix UI / shadcn) — styled around a dark, glassmorphism-inspired visual identity.
+- **State Management:** React Query (`@tanstack/react-query`).
+- **Database:** PostgreSQL, accessed through Prisma ORM.
+- **Authentication:** Auth.js (NextAuth) with JWT-backed sessions.
+- **AI:** Google Gemini via `@google/genai`.
 
 ### Mobile App (React Native + Expo)
-- **Framework:** Expo Router
-- **Estilização:** NativeWind (TailwindCSS para React Native).
-- **Integração:** `@tanstack/react-query` para consumir a API REST exposta pelo Next.js.
-- **Autenticação:** O Mobile app gerencia cookies de sessão localmente para se comunicar de forma transparente com as mesmas rotas autenticadas do Web App.
+The `simple-bank-app/` workspace is a companion Expo Router mobile client that talks to the same authenticated Next.js API routes as the web app, styled with NativeWind and using `@tanstack/react-query` for data fetching. It shares the backend's business rules and ledger model, so there is no separate mobile-only API surface.
 
 <br>
 <p align="center">
@@ -51,54 +50,48 @@ O ecossistema é formado por dois frontends e uma API única unificada via Serve
 </p>
 <br>
 
-## 📦 Como rodar localmente
+## Getting Started
 
-### 1. Clonando e preparando a base de dados
+### 1. Clone and prepare the database
 ```bash
 git clone https://github.com/emanuelVINI01/simple-bank.git
 cd simple-bank
 
-# Instale as dependências da Web/API
+# Install Web/API dependencies
 npm install
 
-# Copie o arquivo .env
+# Copy the environment file
 cp .env.example .env
 
-# Sincronize o banco de dados local com Prisma
+# Sync the local database with Prisma
 npx prisma db push
 ```
 
-### 2. Configurando as Variáveis de Ambiente (`.env`)
-No arquivo `.env`, certifique-se de configurar:
-- `AUTH_SECRET`: Uma chave aleatória para assinar os tokens JWT (ex: `openssl rand -base64 32`).
-- `GOOGLE_GENERATIVE_AI_API_KEY`: Sua chave de API do Google Gemini para alimentar as funcionalidades de IA.
+### 2. Configure environment variables (`.env`)
+In your `.env` file, make sure to set:
+- `DATABASE_URL`: connection string for your PostgreSQL database.
+- `AUTH_SECRET`: a random secret used to sign JWTs (e.g. `openssl rand -base64 32`).
+- `AUTH_URL`: the base URL of the app (e.g. `http://localhost:3000`).
+- `GEMINI_API_KEY`: your Google Gemini API key, used to power the AI features.
 
-### 3. Rodando o Servidor Web / API
+### 3. Run the Web app / API
 ```bash
 npm run dev
 ```
-O portal web e a API estarão disponíveis em `http://localhost:3000`.
+The web app and API will be available at `http://localhost:3000`.
 
-### 4. Rodando o App Mobile
-Em um terminal separado:
+### 4. Run the Mobile app
+In a separate terminal:
 ```bash
 cd simple-bank-app
 
-# Instale as dependências
+# Install dependencies
 npm install
 
-# Inicie o empacotador do Expo
+# Start the Expo bundler
 npx expo start
 ```
-No arquivo `.env` do App Mobile, aponte a URL da API para sua máquina local.
+In the Mobile app's `.env` file, point the API URL to your local machine.
 
-## 🤝 Regras e Padrões de Projeto (AGENTS.md)
-Este projeto adere fortemente a arquiteturas limpas com foco em **Responsabilidade Única**:
-1. **Pages/Screens compõem** (layout e data fetching containers).
-2. **Components renderizam** (pequenos e fáceis de ler, com foco na UI).
-3. **Hooks controlam** (regras de negócio, integrações via react-query, estados isolados).
-4. **i18n** é obrigatório: nenhum texto de interface deve estar *hardcoded* nos componentes (incluindo Mobile).
-5. O padrão de cores acompanha fielmente o modelo **Dracula** original, sem desvios para bibliotecas padrão ou bibliotecas UI genéricas.
-
-## 📄 Licença
-Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
+## License
+Distributed under the MIT license. See [`LICENSE`](LICENSE) for details.

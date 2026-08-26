@@ -51,15 +51,15 @@ export function TransactionAnalysisModal({
   };
 
   const getRiskColor = (score = 0) => {
-    if (score < 30) return "text-[#50fa7b]"; // Green
-    if (score < 70) return "text-[#ffb86c]"; // Orange
-    return "text-[#ff5555]"; // Red
+    if (score < 30) return "text-[var(--accent)]"; // Green
+    if (score < 70) return "text-[var(--warning)]"; // Orange
+    return "text-[var(--error)]"; // Red
   };
 
   const getRiskProgressColor = (score = 0) => {
-    if (score < 30) return "bg-[#50fa7b]";
-    if (score < 70) return "bg-[#ffb86c]";
-    return "bg-[#ff5555]";
+    if (score < 30) return "bg-[var(--accent)]";
+    if (score < 70) return "bg-[var(--warning)]";
+    return "bg-[var(--error)]";
   };
 
   return (
@@ -86,10 +86,10 @@ export function TransactionAnalysisModal({
           {/* Header */}
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#bd93f9]/10">
-                <Sparkles className="h-4 w-4 text-[#bd93f9]" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--info)]/10">
+                <Sparkles className="h-4 w-4 text-[var(--info)]" />
               </div>
-              <h3 className="text-lg font-black text-white sm:text-xl">
+              <h3 className="text-lg font-bold text-[var(--fg)] sm:text-xl">
                 AI Transaction Review
               </h3>
             </div>
@@ -97,15 +97,15 @@ export function TransactionAnalysisModal({
               {!isLoading && !error && analysis && (
                 <button
                   onClick={handleForceRefresh}
-                  className="chip-btn flex h-9 w-9 items-center justify-center rounded-lg text-white"
+                  className="chip-btn flex h-9 w-9 items-center justify-center rounded-lg text-[var(--fg)]"
                   title="Re-analyze transaction"
                 >
-                  <RefreshCw className="h-4 w-4 text-[#8be9fd]" />
+                  <RefreshCw className="h-4 w-4 text-[var(--info)]" />
                 </button>
               )}
               <button
                 onClick={onClose}
-                className="chip-btn flex h-9 w-9 items-center justify-center rounded-lg text-white"
+                className="chip-btn flex h-9 w-9 items-center justify-center rounded-lg text-[var(--fg)]"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -116,28 +116,28 @@ export function TransactionAnalysisModal({
           {isLoading ? (
             <div className="flex min-h-[300px] flex-col items-center justify-center space-y-4 text-center">
               <div className="relative flex h-16 w-16 items-center justify-center">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#bd93f9]/10 opacity-75"></span>
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#bd93f9]/20">
-                  <RefreshCw className="h-6 w-6 animate-spin text-[#bd93f9]" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--info)]/10 opacity-75"></span>
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--info)]/20">
+                  <RefreshCw className="h-6 w-6 animate-spin text-[var(--info)]" />
                 </div>
               </div>
               <div>
-                <p className="text-sm font-bold text-white">Consulting Finance Model...</p>
-                <p className="mt-1 text-xs text-[#8892a4]">Generating friendly labels, category classification and risk scoring</p>
+                <p className="text-sm font-bold text-[var(--fg)]">Consulting Finance Model...</p>
+                <p className="mt-1 text-xs text-[var(--fg-subtle)]">Generating friendly labels, category classification and risk scoring</p>
               </div>
             </div>
           ) : error ? (
             <div className="flex min-h-[300px] flex-col items-center justify-center space-y-4 text-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#ff5555]/10">
-                <AlertTriangle className="h-6 w-6 text-[#ff5555]" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--error)]/10">
+                <AlertTriangle className="h-6 w-6 text-[var(--error)]" />
               </div>
               <div>
-                <p className="text-sm font-bold text-white">{t("common.error")}</p>
-                <p className="mt-1 text-xs text-[#ff5555]">{error.message}</p>
+                <p className="text-sm font-bold text-[var(--fg)]">{t("common.error")}</p>
+                <p className="mt-1 text-xs text-[var(--error)]">{error.message}</p>
               </div>
               <button
                 onClick={() => mutate({ id: transaction.id })}
-                className="btn-bet h-10 px-4 text-xs font-bold"
+                className="btn-primary-cta h-10 px-4 text-xs font-bold"
               >
                 {t("common.retry")}
               </button>
@@ -147,14 +147,14 @@ export function TransactionAnalysisModal({
               {/* Transaction Mini Summary */}
               <div className="glass-surface-2 rounded-xl p-4 border border-white/5 flex justify-between items-center">
                 <div>
-                  <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-[#8892a4]">Original Details</p>
-                  <p className="mt-1 font-bold text-white truncate max-w-[200px]">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-[var(--fg-subtle)]">Original Details</p>
+                  <p className="mt-1 font-bold text-[var(--fg)] truncate max-w-[200px]">
                     {transaction.description || "No description provided"}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-[#8892a4]">Amount</p>
-                  <p className={`mt-1 font-black ${transaction.type === "CREDIT" ? "text-[#50fa7b]" : "text-white"}`}>
+                  <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-[var(--fg-subtle)]">Amount</p>
+                  <p className={`mt-1 font-bold ${transaction.type === "CREDIT" ? "text-[var(--accent)]" : "text-[var(--fg)]"}`}>
                     {transaction.type === "CREDIT" ? "+" : "-"}{formatMoney(transaction.amount)}
                   </p>
                 </div>
@@ -162,7 +162,7 @@ export function TransactionAnalysisModal({
 
               {/* Cache Indicator */}
               {isCacheHit && (
-                <div className="flex items-center gap-1.5 rounded-lg bg-[#50fa7b]/10 border border-[#50fa7b]/20 px-3 py-1.5 text-xs text-[#50fa7b]">
+                <div className="flex items-center gap-1.5 rounded-lg bg-[var(--accent)]/10 border border-[var(--accent)]/20 px-3 py-1.5 text-xs text-[var(--accent)]">
                   <CheckCircle className="h-3.5 w-3.5" />
                   <span>Cache hit! Saved daily API quota.</span>
                 </div>
@@ -171,12 +171,12 @@ export function TransactionAnalysisModal({
               {/* AI Categorized Label */}
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#bd93f9]">AI Classification</span>
-                  <span className="badge-tag bg-[#ff79c6]/10 text-[#ff79c6] border border-[#ff79c6]/20 py-0.5 px-2 text-xs font-bold rounded">
+                  <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-[var(--info)]">AI Classification</span>
+                  <span className="badge-tag bg-[var(--info)]/10 text-[var(--info)] border border-[var(--info)]/20 py-0.5 px-2 text-xs font-bold rounded">
                     {analysis.category}
                   </span>
                 </div>
-                <h4 className="mt-2 text-xl font-bold text-white leading-snug">
+                <h4 className="mt-2 text-xl font-bold text-[var(--fg)] leading-snug">
                   {analysis.friendlyDescription}
                 </h4>
               </div>
@@ -185,8 +185,8 @@ export function TransactionAnalysisModal({
               <div className="glass-surface-2 rounded-xl p-4 border border-white/5 space-y-3">
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
-                    <ShieldAlert className="h-4 w-4 text-[#8be9fd]" />
-                    <span className="text-xs font-bold text-white">Risk Evaluation</span>
+                    <ShieldAlert className="h-4 w-4 text-[var(--info)]" />
+                    <span className="text-xs font-bold text-[var(--fg)]">Risk Evaluation</span>
                   </div>
                   <span className={`text-xs font-bold uppercase ${getRiskColor(analysis.riskScore)}`}>
                     {analysis.riskLevel} Risk ({analysis.riskScore}/100)
@@ -199,30 +199,30 @@ export function TransactionAnalysisModal({
                     className={`h-full rounded-full transition-all duration-500 ${getRiskProgressColor(analysis.riskScore)}`}
                   />
                 </div>
-                <p className="text-xs leading-relaxed text-[#a7b0c8]">
+                <p className="text-xs leading-relaxed text-[var(--fg-muted)]">
                   {analysis.riskExplanation}
                 </p>
               </div>
 
               {/* Budgeting Tip */}
-              <div className="rounded-xl border border-[#bd93f9]/30 bg-[#bd93f9]/5 p-4 space-y-1">
-                <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-[#bd93f9]">Financial Tip</p>
-                <p className="text-xs leading-relaxed text-white">
+              <div className="rounded-xl border border-[var(--info)]/30 bg-[var(--info)]/5 p-4 space-y-1">
+                <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-[var(--info)]">Financial Tip</p>
+                <p className="text-xs leading-relaxed text-[var(--fg)]">
                   {analysis.budgetTip}
                 </p>
               </div>
             </div>
           ) : (
             <div className="flex min-h-[300px] flex-col items-center justify-center text-center">
-              <HelpCircle className="h-12 w-12 text-[#8892a4]/40" />
-              <p className="mt-3 text-sm text-[#8892a4]">No analysis information available</p>
+              <HelpCircle className="h-12 w-12 text-[var(--fg-subtle)]/40" />
+              <p className="mt-3 text-sm text-[var(--fg-subtle)]">No analysis information available</p>
             </div>
           )}
 
           {/* Usage Stats Footer */}
           {analyzeMutation.data?.usage && (
             <div className="mt-6 border-t border-white/[0.06] pt-4 text-center">
-              <p className="text-[10px] text-[#8892a4]">
+              <p className="text-[10px] text-[var(--fg-subtle)]">
                 AI Daily Quota: {analyzeMutation.data.usage.used}/{analyzeMutation.data.usage.limit} requests ({analyzeMutation.data.usage.remaining} remaining today)
               </p>
             </div>

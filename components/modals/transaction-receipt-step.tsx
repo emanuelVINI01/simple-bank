@@ -23,14 +23,14 @@ export function ReceiptStep({
   return (
     <StepPanel>
       <div className="py-5 text-center">
-        <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }} className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[#50fa7b]/15">
-          <CheckCircle2 className="h-8 w-8 text-[#50fa7b]" />
+        <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }} className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--accent)]/15">
+          <CheckCircle2 className="h-8 w-8 text-[var(--accent)]" />
         </motion.div>
-        <h3 className="text-2xl font-black text-white">{t("transfer.success")}</h3>
+        <h3 className="text-2xl font-bold text-[var(--fg)]">{t("transfer.success")}</h3>
         {receipt?.transactionId ? <ReceiptReference transactionId={receipt.transactionId} /> : null}
         {error ? <div className="mt-4"><ErrorBox message={error} /></div> : null}
         <div className="mt-6 grid gap-3 sm:grid-cols-[1fr_auto]">
-          <button onClick={onOpenReceipt} disabled={!receipt?.transactionId || opening} className="btn-cashout flex h-12 items-center justify-center gap-2 px-6 text-sm font-bold disabled:opacity-60">
+          <button onClick={onOpenReceipt} disabled={!receipt?.transactionId || opening} className="btn-secondary-cta flex h-12 items-center justify-center gap-2 px-6 text-sm font-bold disabled:opacity-60">
             {opening ? <Loader2 className="h-4 w-4 animate-spin" /> : <ExternalLink className="h-4 w-4" />}
             {t("transfer.openReceipt")}
           </button>
@@ -46,8 +46,8 @@ function ReceiptReference({ transactionId }: { transactionId: string }) {
 
   return (
     <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4 text-left">
-      <p className="text-xs uppercase tracking-[0.2em] text-[#8892a4]">{t("transaction.id")}</p>
-      <p className="mt-2 break-all font-mono text-xs text-[#8be9fd]">{transactionId}</p>
+      <p className="text-xs uppercase tracking-[0.2em] text-[var(--fg-subtle)]">{t("transaction.id")}</p>
+      <p className="mt-2 break-all font-mono text-xs text-[var(--info)]">{transactionId}</p>
     </div>
   );
 }

@@ -54,37 +54,37 @@ export default function LoginPage() {
           className="space-y-3"
         >
           <div>
-            <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#bd93f9]/20">
-              <LockKeyhole className="h-5 w-5 text-[#bd93f9]" />
+            <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/20">
+              <LockKeyhole className="h-5 w-5 text-[var(--accent)]" />
             </span>
-            <h2 className="text-2xl font-black text-white">{t("auth.login")}</h2>
+            <h2 className="text-2xl font-bold text-[var(--fg)]">{t("auth.login")}</h2>
           </div>
 
           <label className="block">
-            <span className="mb-1.5 block text-xs font-semibold text-[#f8f8f2]">{t("auth.email")}</span>
+            <span className="mb-1.5 block text-xs font-semibold text-[var(--fg)]">{t("auth.email")}</span>
             <input className="input-neon h-10 px-3 text-sm" type="email" {...form.register("email")} />
-            <span className="mt-1 block min-h-5 text-xs text-[#ff79c6]">{form.formState.errors.email ? t("common.error") : ""}</span>
+            <span className="mt-1 block min-h-5 text-xs text-[var(--error)]">{form.formState.errors.email ? t("common.error") : ""}</span>
           </label>
 
           <label className="block">
-            <span className="mb-1.5 block text-xs font-semibold text-[#f8f8f2]">{t("auth.password")}</span>
+            <span className="mb-1.5 block text-xs font-semibold text-[var(--fg)]">{t("auth.password")}</span>
             <input className="input-neon h-10 px-3 text-sm" type="password" {...form.register("password")} />
-            <span className="mt-1 block min-h-5 text-xs text-[#ff79c6]">{form.formState.errors.password ? t("common.error") : ""}</span>
+            <span className="mt-1 block min-h-5 text-xs text-[var(--error)]">{form.formState.errors.password ? t("common.error") : ""}</span>
           </label>
 
           {errorMessage ? (
-            <div className="rounded-xl border border-[#ff79c6]/30 bg-[#ff79c6]/10 px-3 py-2 text-xs text-[#ff79c6]">
+            <div className="rounded-xl border border-[var(--error)]/30 bg-[var(--error)]/10 px-3 py-2 text-xs text-[var(--error)]">
               {errorMessage}
             </div>
           ) : null}
 
-          <button disabled={auth.loginPending} className="btn-bet flex h-10 w-full items-center justify-center gap-2 text-sm font-black disabled:cursor-not-allowed disabled:opacity-60">
+          <button disabled={auth.loginPending} className="btn-primary-cta flex h-10 w-full items-center justify-center gap-2 text-sm font-bold disabled:cursor-not-allowed disabled:opacity-60">
             {auth.loginPending ? t("auth.login.loading") : t("auth.login.cta")}
             <ArrowRight className="h-4 w-4" />
           </button>
 
-          <p className="text-center text-sm text-[#8892a4]">
-            {t("auth.noAccount")} <Link className="font-semibold text-[#8be9fd]" href="/register">{t("auth.register")}</Link>
+          <p className="text-center text-sm text-[var(--fg-subtle)]">
+            {t("auth.noAccount")} <Link className="font-semibold text-[var(--info)]" href="/register">{t("auth.register")}</Link>
           </p>
         </motion.form>
       </AuthShell>

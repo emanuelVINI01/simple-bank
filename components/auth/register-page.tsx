@@ -81,16 +81,16 @@ function RegisterForm() {
       className="space-y-3"
     >
       <div>
-        <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#50fa7b]/15">
-          <ShieldCheck className="h-5 w-5 text-[#50fa7b]" />
+        <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/15">
+          <ShieldCheck className="h-5 w-5 text-[var(--accent)]" />
         </span>
-        <h2 className="text-2xl font-black text-white">{t("auth.register")}</h2>
+        <h2 className="text-2xl font-bold text-[var(--fg)]">{t("auth.register")}</h2>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
         {fields.map((field) => (
           <label key={field.name} className={`block ${field.name === "taxId" ? "sm:col-span-2" : ""}`}>
-            <span className="mb-1.5 block text-xs font-semibold text-[#f8f8f2]">{field.label}</span>
+            <span className="mb-1.5 block text-xs font-semibold text-[var(--fg)]">{field.label}</span>
             <input
               className="input-neon h-10 px-3 text-sm"
               type={field.type}
@@ -100,13 +100,13 @@ function RegisterForm() {
                 onChange: (event) => form.setValue("taxId", formatTaxId(event.target.value), { shouldDirty: true, shouldValidate: true }),
               } : undefined)}
             />
-            <span className="mt-1 block min-h-4 text-xs text-[#ff79c6]">{form.formState.errors[field.name] ? t("common.error") : ""}</span>
+            <span className="mt-1 block min-h-4 text-xs text-[var(--error)]">{form.formState.errors[field.name] ? t("common.error") : ""}</span>
           </label>
         ))}
       </div>
 
       {submitError ? (
-        <div className="rounded-xl border border-[#ff79c6]/30 bg-[#ff79c6]/10 px-3 py-2 text-xs text-[#ff79c6]">
+        <div className="rounded-xl border border-[var(--error)]/30 bg-[var(--error)]/10 px-3 py-2 text-xs text-[var(--error)]">
           {submitError}
         </div>
       ) : null}
@@ -114,14 +114,14 @@ function RegisterForm() {
       <button
         disabled={form.formState.isSubmitting}
         onClick={() => form.clearErrors("root")}
-        className="btn-cashout flex h-10 w-full items-center justify-center gap-2 text-sm font-black disabled:cursor-not-allowed disabled:opacity-60"
+        className="btn-secondary-cta flex h-10 w-full items-center justify-center gap-2 text-sm font-bold disabled:cursor-not-allowed disabled:opacity-60"
       >
         {form.formState.isSubmitting ? t("auth.register.loading") : t("auth.register.cta")}
         <ArrowRight className="h-4 w-4" />
       </button>
 
-      <p className="text-center text-sm text-[#8892a4]">
-        {t("auth.hasAccount")} <Link className="font-semibold text-[#8be9fd]" href="/login">{t("auth.login")}</Link>
+      <p className="text-center text-sm text-[var(--fg-subtle)]">
+        {t("auth.hasAccount")} <Link className="font-semibold text-[var(--info)]" href="/login">{t("auth.login")}</Link>
       </p>
     </motion.form>
   );

@@ -6,7 +6,9 @@ import {
   ArrowRight,
   CheckCircle,
   Fingerprint,
+  Gauge,
   KeyRound,
+  ListChecks,
   ReceiptText,
   ShieldCheck,
   Sparkles,
@@ -18,37 +20,35 @@ import { useI18n } from "@/src/i18n/provider";
 
 const featureIcons = [ShieldCheck, Zap, ReceiptText, Fingerprint, KeyRound, Sparkles];
 const featureColors = [
-  "text-[#50fa7b]",
-  "text-[#8be9fd]",
-  "text-[#bd93f9]",
-  "text-[#ff79c6]",
-  "text-[#f1fa8c]",
-  "text-[#ffb86c]",
+  "text-[var(--accent)]",
+  "text-[var(--info)]",
+  "text-[var(--warning)]",
+  "text-[var(--accent)]",
+  "text-[var(--info)]",
+  "text-[var(--warning)]",
 ];
 const featureBg = [
-  "bg-[#50fa7b]/10 border-[#50fa7b]/20",
-  "bg-[#8be9fd]/10 border-[#8be9fd]/20",
-  "bg-[#bd93f9]/10 border-[#bd93f9]/20",
-  "bg-[#ff79c6]/10 border-[#ff79c6]/20",
-  "bg-[#f1fa8c]/10 border-[#f1fa8c]/20",
-  "bg-[#ffb86c]/10 border-[#ffb86c]/20",
+  "bg-[var(--accent)]/10 border-[var(--accent)]/20",
+  "bg-[var(--info)]/10 border-[var(--info)]/20",
+  "bg-[var(--warning)]/10 border-[var(--warning)]/20",
+  "bg-[var(--accent)]/10 border-[var(--accent)]/20",
+  "bg-[var(--info)]/10 border-[var(--info)]/20",
+  "bg-[var(--warning)]/10 border-[var(--warning)]/20",
 ];
 
 const featureKeys = [1, 2, 3, 4, 5, 6] as const;
 
-const socialStats = [
-  { value: "10k+", labelKey: "landing.social.users" as const },
-  { value: "R$ 0", labelKey: "landing.social.fee" as const },
-  { value: "99.9%", labelKey: "landing.social.uptime" as const },
+const differentiators = [
+  { icon: Gauge, key: "item1" as const },
+  { icon: Sparkles, key: "item2" as const },
+  { icon: ListChecks, key: "item3" as const },
 ];
 
 const mockTransactions = [
-  { label: "CREDIT · ref_92b", color: "bg-[#50fa7b]", ago: "2m" },
-  { label: "DEBIT · ref_91a", color: "bg-[#ff79c6]", ago: "15m" },
-  { label: "CREDIT · ref_88c", color: "bg-[#50fa7b]", ago: "1h" },
+  { label: "CREDIT · TXN #0092b", color: "bg-[var(--accent)]", ago: "2m" },
+  { label: "DEBIT · TXN #0091a", color: "bg-[var(--fg-subtle)]", ago: "15m" },
+  { label: "CREDIT · TXN #0088c", color: "bg-[var(--accent)]", ago: "1h" },
 ];
-
-
 
 export function LandingPage() {
   const { t } = useI18n();
@@ -64,16 +64,16 @@ export function LandingPage() {
             <CheckCircle className="h-3.5 w-3.5" />
             {t("landing.hero.badge")}
           </div>
-          <h1 className="max-w-2xl text-5xl font-black leading-[1.02] text-white sm:text-6xl lg:text-[68px] lg:leading-[0.96]">
+          <h1 className="max-w-2xl text-5xl font-bold leading-[1.02] tracking-tight text-[var(--fg)] sm:text-6xl lg:text-[68px] lg:leading-[0.96]">
             {t("landing.hero.title")}
           </h1>
-          <p className="mt-6 max-w-xl text-base leading-7 text-[#8892a4] sm:text-lg sm:leading-8">
+          <p className="mt-6 max-w-xl text-base leading-7 text-[var(--fg-subtle)] sm:text-lg sm:leading-8">
             {t("landing.hero.subtitle")}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/register"
-              className="btn-bet inline-flex h-13 items-center justify-center gap-2 px-7 text-sm font-bold"
+              className="btn-primary-cta inline-flex h-13 items-center justify-center gap-2 px-7 text-sm font-bold"
             >
               {t("landing.hero.cta.primary")}
               <ArrowRight className="h-4 w-4" />
@@ -85,7 +85,7 @@ export function LandingPage() {
               {t("landing.hero.cta.secondary")}
             </Link>
           </div>
-          <p className="mt-5 text-xs text-[#8892a4]">{t("landing.hero.trust")}</p>
+          <p className="mt-5 text-xs text-[var(--fg-subtle)]">{t("landing.hero.trust")}</p>
         </motion.div>
 
         {/* ─── Dashboard Mockup ─── */}
@@ -95,29 +95,29 @@ export function LandingPage() {
           transition={{ duration: 0.7, delay: 0.15 }}
           className="gradient-ring rounded-2xl"
         >
-          <div className="game-panel rounded-2xl p-5 sm:p-6">
+          <div className="game-panel ledger-paper rounded-2xl p-5 sm:p-6">
             <div className="mb-5 flex items-center justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8be9fd]">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--info)]">
                   {t("landing.mockup.label")}
                 </p>
                 <div className="mt-2 flex items-baseline gap-2">
-                  <span className="text-3xl font-black neon-text-green">$12,840.00</span>
-                  <TrendingUp className="h-4 w-4 text-[#50fa7b]" />
+                  <span className="text-3xl font-bold tracking-tight neon-text-green">$12,840.00</span>
+                  <TrendingUp className="h-4 w-4 text-[var(--accent)]" />
                 </div>
               </div>
-              <span className="rounded-full bg-[#50fa7b]/10 px-3 py-1 text-xs font-bold text-[#50fa7b]">
+              <span className="rounded-full bg-[var(--accent)]/10 px-3 py-1 text-xs font-bold text-[var(--accent)]">
                 {t("landing.mockup.status")}
               </span>
             </div>
 
             <div className="mb-4 grid grid-cols-2 gap-3">
               <div className="glass-surface rounded-xl p-4">
-                <p className="text-xs text-[#8892a4]">{t("landing.mockup.sent")}</p>
-                <p className="mt-1.5 text-xl font-bold neon-text-pink">$4,210.00</p>
+                <p className="text-xs text-[var(--fg-subtle)]">{t("landing.mockup.sent")}</p>
+                <p className="mt-1.5 text-xl font-bold text-[var(--fg)]">$4,210.00</p>
               </div>
               <div className="glass-surface rounded-xl p-4">
-                <p className="text-xs text-[#8892a4]">{t("landing.mockup.received")}</p>
+                <p className="text-xs text-[var(--fg-subtle)]">{t("landing.mockup.received")}</p>
                 <p className="mt-1.5 text-xl font-bold neon-text-cyan">$8,630.00</p>
               </div>
             </div>
@@ -128,11 +128,11 @@ export function LandingPage() {
                   key={tx.label}
                   className="flex items-center justify-between rounded-xl border border-white/[0.05] bg-black/20 px-4 py-3"
                 >
-                  <span className="flex items-center gap-3 text-sm text-[#f8f8f2]">
+                  <span className="txn-tag flex items-center gap-3 text-sm text-[var(--fg)]">
                     <span className={`h-2 w-2 rounded-full ${tx.color} shadow-lg`} />
                     {tx.label}
                   </span>
-                  <span className="text-xs text-[#8892a4]">{tx.ago}</span>
+                  <span className="text-xs text-[var(--fg-subtle)]">{tx.ago}</span>
                 </div>
               ))}
             </div>
@@ -140,25 +140,29 @@ export function LandingPage() {
         </motion.div>
       </section>
 
-      {/* ─── Social Proof ─── */}
+      {/* ─── Differentiators (real, technical — no invented adoption metrics) ─── */}
       <section className="relative z-10 mx-auto max-w-7xl px-4 py-10 sm:px-6">
-        <div className="glass-surface rounded-2xl px-6 py-6">
-          <div className="grid grid-cols-3 gap-4 text-center">
-            {socialStats.map(({ value, labelKey }) => (
-              <div key={labelKey}>
-                <p className="text-2xl font-black text-white sm:text-3xl">{value}</p>
-                <p className="mt-1 text-xs text-[#8892a4]">{t(labelKey)}</p>
+        <p className="mb-4 text-center text-xs font-semibold uppercase tracking-widest text-[var(--fg-subtle)]">
+          {t("landing.differentiators.eyebrow")}
+        </p>
+        <div className="grid gap-4 sm:grid-cols-3">
+          {differentiators.map(({ icon: Icon, key }) => (
+            <div key={key} className="glass-surface-2 rounded-xl p-5">
+              <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/10">
+                <Icon className="h-5 w-5 text-[var(--accent)]" />
               </div>
-            ))}
-          </div>
+              <h3 className="text-sm font-bold text-[var(--fg)]">{t(`landing.differentiators.${key}.title`)}</h3>
+              <p className="mt-2 text-sm leading-6 text-[var(--fg-subtle)]">{t(`landing.differentiators.${key}.text`)}</p>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* ─── Features ─── */}
       <section className="relative z-10 mx-auto max-w-7xl px-4 py-14 sm:px-6">
         <div className="mb-12 text-center">
-          <h2 className="text-3xl font-black text-white sm:text-4xl">{t("landing.features.title")}</h2>
-          <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-[#8892a4]">{t("landing.features.subtitle")}</p>
+          <h2 className="text-3xl font-bold tracking-tight text-[var(--fg)] sm:text-4xl">{t("landing.features.title")}</h2>
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-[var(--fg-subtle)]">{t("landing.features.subtitle")}</p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {featureKeys.map((n, i) => {
@@ -170,13 +174,14 @@ export function LandingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ delay: i * 0.05 }}
-                className="glass-surface-2 hover-scale rounded-2xl p-6"
+                whileHover={{ y: -4 }}
+                className="glass-surface-2 rounded-xl p-6"
               >
                 <div className={`mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border ${featureBg[i]}`}>
                   <Icon className={`h-5 w-5 ${featureColors[i]}`} />
                 </div>
-                <h3 className="text-base font-bold text-white">{t(`landing.feature${n}.title`)}</h3>
-                <p className="mt-2 text-sm leading-6 text-[#8892a4]">{t(`landing.feature${n}.text`)}</p>
+                <h3 className="text-base font-bold text-[var(--fg)]">{t(`landing.feature${n}.title`)}</h3>
+                <p className="mt-2 text-sm leading-6 text-[var(--fg-subtle)]">{t(`landing.feature${n}.text`)}</p>
               </motion.article>
             );
           })}
@@ -186,12 +191,12 @@ export function LandingPage() {
       {/* ─── CTA Banner ─── */}
       <section className="relative z-10 mx-auto max-w-7xl px-4 pb-24 sm:px-6">
         <div className="balance-card p-8 text-center sm:p-12">
-          <Wallet className="mx-auto mb-4 h-10 w-10 neon-text-purple" />
-          <h2 className="text-3xl font-black text-white sm:text-4xl">{t("landing.cta.title")}</h2>
-          <p className="mx-auto mt-3 max-w-md text-sm text-[#8892a4]">{t("landing.cta.subtitle")}</p>
+          <Wallet className="mx-auto mb-4 h-10 w-10 neon-text-green" />
+          <h2 className="text-3xl font-bold tracking-tight text-[var(--fg)] sm:text-4xl">{t("landing.cta.title")}</h2>
+          <p className="mx-auto mt-3 max-w-md text-sm text-[var(--fg-subtle)]">{t("landing.cta.subtitle")}</p>
           <Link
             href="/register"
-            className="btn-bet mt-8 inline-flex h-13 items-center justify-center gap-2 px-8 text-sm font-black"
+            className="btn-primary-cta mt-8 inline-flex h-13 items-center justify-center gap-2 px-8 text-sm font-bold"
           >
             {t("landing.cta.button")}
             <ArrowRight className="h-4 w-4" />

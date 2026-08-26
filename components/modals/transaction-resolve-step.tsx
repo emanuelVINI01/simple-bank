@@ -53,27 +53,27 @@ export function ResolveKeyStep({
       <div className="space-y-6">
         {/* AI Voice / Text Command input */}
         <div className="glass-surface-2 border border-white/5 rounded-xl p-4 space-y-3">
-          <div className="flex items-center gap-1.5 text-[#bd93f9]">
+          <div className="flex items-center gap-1.5 text-[var(--info)]">
             <Sparkles className="h-4 w-4 animate-pulse" />
             <span className="text-xs font-bold uppercase tracking-wider">AI Assistant Transfer</span>
           </div>
-          <p className="text-[11px] leading-relaxed text-[#a7b0c8]">
+          <p className="text-[11px] leading-relaxed text-[var(--fg-muted)]">
             {locale === "pt-BR"
               ? "Escreva o comando da transferência em linguagem natural (ex: 'Enviar R$ 50 para João pagar a pizza' ou 'Transfer 10 dollars to Alice')."
               : "Instruct the wallet in plain text (e.g., 'Transfer 50 dollars to Alice for dinner' or 'Enviar R$ 15 para Dave')."}
           </p>
           <form onSubmit={handleAiSubmit} className="space-y-3">
             <textarea
-              className="w-full rounded-xl bg-black/30 border border-white/10 p-3 text-xs text-white placeholder-white/30 h-16 focus:outline-none focus:border-[#bd93f9] focus:ring-1 focus:ring-[#bd93f9] resize-none"
+              className="w-full rounded-xl bg-black/30 border border-white/10 p-3 text-xs text-[var(--fg)] placeholder-white/30 h-16 focus:outline-none focus:border-[var(--info)] focus:ring-1 focus:ring-[var(--info)] resize-none"
               placeholder={locale === "pt-BR" ? "Ex: Enviar R$ 50 para Dave" : "E.g., Transfer 50 dollars to Dave"}
               value={aiText}
               onChange={(e) => setAiText(e.target.value)}
             />
-            {aiError && <div className="text-[11px] text-[#ff5555] font-bold">{aiError}</div>}
+            {aiError && <div className="text-[11px] text-[var(--error)] font-bold">{aiError}</div>}
             <button
               type="submit"
               disabled={parseTransfer.isPending || !aiText.trim()}
-              className="btn-bet h-9 w-full flex items-center justify-center gap-2 text-xs font-black disabled:opacity-50"
+              className="btn-primary-cta h-9 w-full flex items-center justify-center gap-2 text-xs font-bold disabled:opacity-50"
             >
               {parseTransfer.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
               {locale === "pt-BR" ? "Processar Comando" : "Process Command"}
@@ -82,7 +82,7 @@ export function ResolveKeyStep({
         </div>
 
         {/* Divider */}
-        <div className="flex items-center justify-between text-xs text-[#a7b0c8] uppercase tracking-[0.2em]">
+        <div className="flex items-center justify-between text-xs text-[var(--fg-muted)] uppercase tracking-[0.2em]">
           <div className="h-px bg-white/10 flex-1" />
           <span className="px-3 text-[10px]">{locale === "pt-BR" ? "Ou chave manual" : "Or manual key"}</span>
           <div className="h-px bg-white/10 flex-1" />
@@ -91,12 +91,12 @@ export function ResolveKeyStep({
         {/* Manual Key Form */}
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <label className="block">
-            <span className="mb-2 block text-sm font-semibold text-[#f8f8f2]">{t("transfer.key")}</span>
+            <span className="mb-2 block text-sm font-semibold text-[var(--fg)]">{t("transfer.key")}</span>
             <input className="input-neon h-12 px-4 font-mono text-sm" placeholder={t("transfer.keyPlaceholder")} {...form.register("key")} />
-            <span className="mt-2 block min-h-5 text-xs text-[#ff79c6]">{form.formState.errors.key ? t("common.error") : ""}</span>
+            <span className="mt-2 block min-h-5 text-xs text-[var(--error)]">{form.formState.errors.key ? t("common.error") : ""}</span>
           </label>
           {errorMessage ? <ErrorBox message={errorMessage} /> : null}
-          <button disabled={pending} className="btn-bet flex h-12 w-full items-center justify-center gap-2 text-sm font-black disabled:opacity-60">
+          <button disabled={pending} className="btn-primary-cta flex h-12 w-full items-center justify-center gap-2 text-sm font-bold disabled:opacity-60">
             {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
             {t("transfer.resolve")}
           </button>

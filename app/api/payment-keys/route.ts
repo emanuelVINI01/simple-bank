@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { publicPaymentKey } from "@/lib/ledger-mappers";
-import { paymentKeySelect } from "@/lib/ledger-selects";
-import { createPaymentKey } from "@/lib/payment-key-service";
-import { prisma } from "@/lib/prisma";
+import { createPaymentKey, listPaymentKeys } from "@/lib/payment-key-service";
 
 export async function GET() {
   const session = await auth();
@@ -12,11 +10,7 @@ export async function GET() {
     return NextResponse.json({ message: "Unauthorized." }, { status: 401 });
   }
 
-  const paymentKeys = await prisma.paymentKey.findMany({
-    where: { userId: session.user.id },
-    orderBy: { createdAt: "desc" },
-    select: paymentKeySelect,
-  });
+  const paymentKeys = await listPaymentKeys(session.user.id);
 
   return NextResponse.json({ paymentKeys: paymentKeys.map(publicPaymentKey) });
 }

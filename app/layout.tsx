@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
+import { JetBrains_Mono } from "next/font/google";
 import { Providers } from "@/app/providers";
 import "./globals.css";
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
@@ -25,9 +33,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className="h-full antialiased"
+      className={`h-full antialiased ${jetbrainsMono.variable}`}
     >
-      <body className="min-h-full">
+      <body className="min-h-full font-medium">
         <Providers>{children}</Providers>
       </body>
     </html>

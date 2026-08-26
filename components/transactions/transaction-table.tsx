@@ -19,12 +19,12 @@ export function TransactionTable({
 
   if (transactions.length === 0) {
     return (
-      <div className="glass-surface-2 flex min-h-[280px] flex-col items-center justify-center rounded-2xl p-8 text-center border border-dashed border-white/10">
-        <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[#bd93f9]/10">
-          <ReceiptText className="h-8 w-8 text-[#bd93f9]" />
+      <div className="glass-surface-2 flex min-h-[280px] flex-col items-center justify-center rounded-xl p-8 text-center border border-dashed border-[var(--border)]">
+        <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--info)]/10">
+          <ReceiptText className="h-8 w-8 text-[var(--info)]" />
         </div>
-        <h3 className="text-xl font-bold text-white">{t("transactions.empty")}</h3>
-        <p className="mt-2 max-w-sm text-sm leading-6 text-[#8892a4]">
+        <h3 className="text-xl font-bold text-[var(--fg)]">{t("transactions.empty")}</h3>
+        <p className="mt-2 max-w-sm text-sm leading-6 text-[var(--fg-subtle)]">
           {t("transactions.emptySubtitle")}
         </p>
       </div>
@@ -32,10 +32,10 @@ export function TransactionTable({
   }
 
   return (
-    <div className="glass-surface-2 overflow-hidden rounded-2xl">
+    <div className="glass-surface-2 ledger-paper overflow-hidden rounded-xl">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[760px] text-left">
-          <thead className="bg-white/[0.03] text-[11px] font-bold uppercase tracking-[0.15em] text-[#8892a4]">
+          <thead className="bg-white/[0.03] text-[11px] font-bold uppercase tracking-[0.15em] text-[var(--fg-subtle)]">
             <tr>
               <th className="px-5 py-4">{t("transactions.type")}</th>
               <th className="px-5 py-4">{t("transactions.amount")}</th>
@@ -59,24 +59,24 @@ export function TransactionTable({
                       {isCredit ? t("transactions.credit") : t("transactions.debit")}
                     </span>
                   </td>
-                  <td className={`px-5 py-4 font-black ${isCredit ? "text-[#50fa7b]" : "text-white"}`}>
+                  <td className={`px-5 py-4 font-bold ${isCredit ? "text-[var(--accent)]" : "text-[var(--fg)]"}`}>
                     {isCredit ? "+" : "-"}{amountStr}
                   </td>
                   <td className="px-5 py-4">
-                    <span className="rounded bg-black/20 px-2 py-1 font-mono text-[11px] text-[#8892a4]">
-                      {truncateReference(transaction.referenceId)}
+                    <span className="txn-tag rounded bg-black/20 px-2 py-1 text-[11px]">
+                      TXN {truncateReference(transaction.referenceId)}
                     </span>
                   </td>
-                  <td className="px-5 py-4 text-[#8892a4]">
+                  <td className="px-5 py-4 text-[var(--fg-subtle)]">
                     {transaction.description || <span className="italic opacity-60">{t("transactions.noDescription")}</span>}
                   </td>
-                  <td className="px-5 py-4 text-[#8892a4]">{formatDate(transaction.createdAt)}</td>
+                  <td className="px-5 py-4 text-[var(--fg-subtle)]">{formatDate(transaction.createdAt)}</td>
                   <td className="px-5 py-4 text-right">
                     <div className="flex items-center justify-end gap-2">
                       {onAnalyzeClick && (
                         <button
                           onClick={() => onAnalyzeClick(transaction)}
-                          className="chip-btn inline-flex h-8 w-8 items-center justify-center text-[#bd93f9] hover:bg-[#bd93f9]/10 rounded-lg"
+                          className="chip-btn inline-flex h-8 w-8 items-center justify-center text-[var(--info)] hover:bg-[var(--info)]/10 rounded-lg"
                           title="Analyze with AI"
                         >
                           <Sparkles className="h-3.5 w-3.5" />
@@ -92,7 +92,7 @@ export function TransactionTable({
                           {t("transactions.download")}
                         </button>
                       ) : (
-                        <span className="text-[#8892a4] opacity-50">-</span>
+                        <span className="text-[var(--fg-subtle)] opacity-50">-</span>
                       )}
                     </div>
                   </td>

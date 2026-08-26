@@ -1,43 +1,39 @@
 @import "tailwindcss";
 
 :root {
-  --dracula-bg: #1a1b26;
-  --dracula-surface: #24253a;
-  --dracula-card: #2e3047;
-  --dracula-border: #3b3d56;
-  --dracula-fg: #f8f8f2;
-  --dracula-comment: #8892a4;
-  --dracula-cyan: #8be9fd;
-  --dracula-purple: #bd93f9;
-  --dracula-green: #50fa7b;
-  --dracula-pink: #ff79c6;
-  --dracula-red: #ff5555;
-  --dracula-orange: #ffb86c;
-  --dracula-yellow: #f1fa8c;
+  /* ── Neutral ramp (shared across sibling projects) ── */
+  --bg: #191a21;
+  --surface: #21222c;
+  --card: #282a36;
+  --card-hover: #2f3244;
+  --border: #44475a;
+  --border-soft: rgba(68, 71, 90, 0.5);
+  --fg: #f8f8f2;
+  --fg-muted: #a7b0c8;
+  --fg-subtle: #6c7086;
 
-  --background: var(--dracula-bg);
-  --foreground: var(--dracula-fg);
-  --surface: var(--dracula-surface);
-  --surface-2: var(--dracula-card);
-  --surface-3: #141521;
-  --primary: var(--dracula-purple);
-  --secondary: var(--dracula-pink);
-  --cyan: var(--dracula-cyan);
-  --success: var(--dracula-green);
-  --warning: var(--dracula-yellow);
-  --muted: var(--dracula-comment);
-  --border-soft: rgba(59, 61, 86, 0.72);
+  /* ── Semantic colors (shared across sibling projects) ── */
+  --success: #50fa7b;
+  --error: #ff5555;
+  --warning: #ffb86c;
+  --info: #8be9fd;
 
-  /* Balance card */
-  --sb-balance-gradient: linear-gradient(135deg, #1e1040 0%, #2d1b69 50%, #1a2744 100%);
-  --sb-green-glow: 0 0 40px rgba(80, 250, 123, 0.15);
+  /* ── Simple Bank accent: money/growth green ── */
+  --accent: #50fa7b;
+
+  --background: var(--bg);
+  --foreground: var(--fg);
+
+  /* Balance card (hero surface) */
+  --sb-balance-gradient: linear-gradient(135deg, #16241d 0%, #1a2d22 45%, #191a21 100%);
+  --sb-accent-glow: 0 0 32px rgba(80, 250, 123, 0.2);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: "Inter", "Space Grotesk", "Satoshi", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", "SFMono-Regular", ui-monospace, monospace;
+  --font-sans: var(--font-jetbrains-mono), "JetBrains Mono", "Fira Code", ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+  --font-mono: var(--font-jetbrains-mono), "JetBrains Mono", "Fira Code", ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
 }
 
 * {
@@ -48,7 +44,7 @@ html {
   width: 100%;
   max-width: 100%;
   min-height: 100%;
-  background: var(--background);
+  background: var(--bg);
 }
 
 body {
@@ -56,12 +52,13 @@ body {
   max-width: 100%;
   min-height: 100%;
   background:
-    radial-gradient(ellipse at 10% 0%, rgba(189, 147, 249, 0.14) 0%, transparent 40%),
-    radial-gradient(ellipse at 90% 10%, rgba(139, 233, 253, 0.08) 0%, transparent 35%),
+    radial-gradient(ellipse at 10% 0%, rgba(80, 250, 123, 0.09) 0%, transparent 40%),
+    radial-gradient(ellipse at 90% 10%, rgba(139, 233, 253, 0.06) 0%, transparent 35%),
     radial-gradient(ellipse at 50% 100%, rgba(80, 250, 123, 0.05) 0%, transparent 50%),
-    linear-gradient(180deg, var(--dracula-bg) 0%, #141521 60%, var(--dracula-bg) 100%);
+    linear-gradient(180deg, var(--bg) 0%, #141520 60%, var(--bg) 100%);
   color: var(--foreground);
-  font-family: "Inter", "Space Grotesk", "Satoshi", ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 500;
   overflow-x: hidden;
   position: relative;
 }
@@ -95,54 +92,81 @@ body::before {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.025;
+  opacity: 0.03;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 256px 256px;
 }
 
 ::selection {
-  background: var(--dracula-purple);
-  color: var(--dracula-bg);
+  background: var(--accent);
+  color: var(--bg);
 }
 
 button, a, input, textarea {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* ─── Scrollbar ─── */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) var(--surface);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+  border: 2px solid var(--surface);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
 /* ─── Glass Surfaces ─── */
 
 .glass-surface {
-  background: linear-gradient(145deg, rgba(36, 37, 58, 0.92), rgba(26, 27, 38, 0.88));
-  border: 1px solid rgba(59, 61, 86, 0.65);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  background: linear-gradient(145deg, rgba(40, 42, 54, 0.92), rgba(25, 26, 33, 0.9));
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(20px);
 }
 
 .glass-surface-2 {
-  background: linear-gradient(145deg, rgba(46, 48, 71, 0.55), rgba(20, 21, 33, 0.88));
-  border: 1px solid rgba(59, 61, 86, 0.72);
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.28);
-  backdrop-filter: blur(16px);
+  background: var(--card);
+  border: 1px solid var(--border);
+  transition: border-color 200ms ease, transform 200ms ease;
+}
+
+.glass-surface-2:hover {
+  border-color: var(--accent);
 }
 
 .game-panel {
-  background:
-    linear-gradient(135deg, rgba(189, 147, 249, 0.12), transparent 40%),
-    linear-gradient(180deg, rgba(36, 37, 58, 0.92), rgba(20, 21, 33, 0.96));
-  border: 1px solid rgba(59, 61, 86, 0.72);
-  box-shadow: 0 20px 64px rgba(189, 147, 249, 0.10);
+  background: linear-gradient(180deg, rgba(40, 42, 54, 0.92), rgba(25, 26, 33, 0.96));
+  border: 1px solid var(--border);
 }
 
-/* ─── Balance Card ─── */
+/* ─── Balance Card (hero surface) ─── */
 
 .balance-card {
   background: var(--sb-balance-gradient);
-  border: 1px solid rgba(189, 147, 249, 0.25);
-  box-shadow: 0 24px 80px rgba(45, 27, 105, 0.5), var(--sb-green-glow);
+  border: 1px solid rgba(80, 250, 123, 0.25);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4), var(--sb-accent-glow);
   border-radius: 20px;
   position: relative;
   overflow: hidden;
+  isolation: isolate;
 }
 
 .balance-card::before {
@@ -150,27 +174,56 @@ button, a, input, textarea {
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  background: linear-gradient(135deg, rgba(189, 147, 249, 0.3), rgba(139, 233, 253, 0.15), transparent 60%);
+  background: linear-gradient(135deg, rgba(80, 250, 123, 0.3), rgba(139, 233, 253, 0.12), transparent 60%);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask-composite: exclude;
   padding: 1px;
   pointer-events: none;
+  z-index: 1;
+}
+
+/* ─── Ledger paper motif (ruled notebook lines + margin rule) ─── */
+
+.ledger-paper {
+  position: relative;
+  isolation: isolate;
+}
+
+.ledger-paper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
+  background-image:
+    linear-gradient(90deg, rgba(80, 250, 123, 0.16) 0, rgba(80, 250, 123, 0.16) 1px, transparent 1px),
+    repeating-linear-gradient(rgba(248, 248, 242, 0.035) 0, rgba(248, 248, 242, 0.035) 1px, transparent 1px, transparent 28px);
+  background-position: 28px 0, 0 0;
+  background-size: 100% 100%, 100% 28px;
+}
+
+/* ─── Transaction reference tag ─── */
+
+.txn-tag {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--accent);
 }
 
 /* ─── Stat Cards ─── */
 
 .stat-card {
-  background: linear-gradient(145deg, rgba(36, 37, 58, 0.9), rgba(26, 27, 38, 0.85));
-  border: 1px solid rgba(59, 61, 86, 0.6);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  border-radius: 14px;
-  transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: border-color 200ms ease, transform 200ms ease;
 }
 
 .stat-card:hover {
-  border-color: rgba(139, 233, 253, 0.25);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
-  transform: translateY(-1px);
+  border-color: var(--accent);
+  transform: translateY(-2px);
 }
 
 /* ─── Step Indicator ─── */
@@ -190,35 +243,35 @@ button, a, input, textarea {
   border-radius: 50%;
   font-size: 12px;
   font-weight: 700;
-  border: 2px solid rgba(59, 61, 86, 0.8);
-  background: rgba(26, 27, 38, 0.9);
-  color: var(--dracula-comment);
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--fg-subtle);
   transition: all 200ms ease;
 }
 
 .step-dot.active {
-  border-color: var(--dracula-purple);
-  background: rgba(189, 147, 249, 0.15);
-  color: var(--dracula-purple);
-  box-shadow: 0 0 16px rgba(189, 147, 249, 0.3);
+  border-color: var(--info);
+  background: rgba(139, 233, 253, 0.15);
+  color: var(--info);
+  box-shadow: 0 0 16px rgba(139, 233, 253, 0.3);
 }
 
 .step-dot.completed {
-  border-color: var(--dracula-green);
+  border-color: var(--success);
   background: rgba(80, 250, 123, 0.12);
-  color: var(--dracula-green);
+  color: var(--success);
 }
 
 .step-line {
   flex: 1;
   height: 2px;
-  background: rgba(59, 61, 86, 0.6);
+  background: var(--border);
   margin: 0 6px;
   transition: background 300ms ease;
 }
 
 .step-line.completed {
-  background: var(--dracula-green);
+  background: var(--success);
 }
 
 /* ─── Avatar ─── */
@@ -230,9 +283,9 @@ button, a, input, textarea {
   border-radius: 50%;
   font-weight: 700;
   letter-spacing: -0.02em;
-  background: linear-gradient(135deg, rgba(189, 147, 249, 0.2), rgba(139, 233, 253, 0.15));
-  border: 2px solid rgba(189, 147, 249, 0.35);
-  color: var(--dracula-purple);
+  background: linear-gradient(135deg, rgba(80, 250, 123, 0.2), rgba(139, 233, 253, 0.12));
+  border: 2px solid rgba(80, 250, 123, 0.35);
+  color: var(--accent);
 }
 
 /* ─── Hero Badge ─── */
@@ -245,7 +298,7 @@ button, a, input, textarea {
   border-radius: 999px;
   border: 1px solid rgba(80, 250, 123, 0.3);
   background: rgba(80, 250, 123, 0.08);
-  color: var(--dracula-green);
+  color: var(--accent);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -256,12 +309,12 @@ button, a, input, textarea {
 .lang-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   padding: 5px 10px;
   border-radius: 8px;
-  border: 1px solid rgba(59, 61, 86, 0.7);
-  background: rgba(59, 61, 86, 0.18);
-  color: var(--dracula-comment);
+  border: 1px solid var(--border);
+  background: rgba(68, 71, 90, 0.18);
+  color: var(--fg-muted);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -271,70 +324,61 @@ button, a, input, textarea {
 }
 
 .lang-toggle:hover {
-  border-color: rgba(189, 147, 249, 0.4);
-  background: rgba(189, 147, 249, 0.08);
-  color: var(--dracula-purple);
+  border-color: var(--accent);
+  background: rgba(80, 250, 123, 0.08);
+  color: var(--accent);
 }
 
 /* ─── Neon Text ─── */
 
-.neon-text-purple {
-  color: var(--dracula-purple);
-  text-shadow: 0 0 24px rgba(189, 147, 249, 0.45);
-}
-
 .neon-text-green {
-  color: var(--success);
-  text-shadow: 0 0 20px rgba(80, 250, 123, 0.3);
-}
-
-.neon-text-pink {
-  color: var(--dracula-pink);
-  text-shadow: 0 0 20px rgba(255, 121, 198, 0.3);
+  color: var(--accent);
+  text-shadow: 0 0 20px rgba(80, 250, 123, 0.35);
 }
 
 .neon-text-cyan {
-  color: var(--cyan);
+  color: var(--info);
   text-shadow: 0 0 20px rgba(139, 233, 253, 0.3);
 }
 
 /* ─── Buttons ─── */
 
-.btn-bet {
+.btn-primary-cta {
   border-radius: 12px;
-  background: linear-gradient(135deg, var(--dracula-purple), var(--dracula-pink) 62%, var(--dracula-cyan) 130%);
-  color: var(--dracula-bg);
-  box-shadow: 0 16px 40px rgba(189, 147, 249, 0.22), 0 0 28px rgba(255, 121, 198, 0.1);
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 16px 40px rgba(80, 250, 123, 0.22);
   transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
   font-weight: 700;
 }
 
-.btn-bet:hover {
+.btn-primary-cta:hover {
   filter: brightness(1.08);
   transform: translateY(-2px);
-  box-shadow: 0 24px 56px rgba(189, 147, 249, 0.3), 0 0 34px rgba(139, 233, 253, 0.14);
+  box-shadow: 0 24px 56px rgba(80, 250, 123, 0.3);
 }
 
-.btn-bet:active {
+.btn-primary-cta:active {
   transform: translateY(0);
 }
 
-.btn-cashout {
+.btn-secondary-cta {
   border-radius: 12px;
-  background: linear-gradient(135deg, var(--dracula-green), var(--dracula-cyan));
-  color: var(--dracula-bg);
-  box-shadow: 0 16px 40px rgba(80, 250, 123, 0.2);
-  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+  border: 1.5px solid rgba(80, 250, 123, 0.45);
+  background: rgba(80, 250, 123, 0.06);
+  color: var(--accent);
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease;
   font-weight: 700;
 }
 
-.btn-cashout:hover {
-  filter: brightness(1.06);
+.btn-secondary-cta:hover {
+  border-color: var(--accent);
+  background: rgba(80, 250, 123, 0.14);
   transform: translateY(-2px);
-  box-shadow: 0 24px 56px rgba(139, 233, 253, 0.24);
+  box-shadow: 0 16px 40px rgba(80, 250, 123, 0.16);
 }
 
-.btn-cashout:active {
+.btn-secondary-cta:active {
   transform: translateY(0);
 }
 
@@ -343,26 +387,26 @@ button, a, input, textarea {
 .input-neon {
   width: 100%;
   border-radius: 10px;
-  border: 1px solid rgba(59, 61, 86, 0.85);
-  background: rgba(20, 21, 33, 0.85);
+  border: 1px solid var(--border);
+  background: rgba(20, 21, 26, 0.85);
   color: var(--foreground);
   outline: none;
   transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
 }
 
 .input-neon::placeholder {
-  color: var(--dracula-comment);
-  opacity: 0.7;
+  color: var(--fg-subtle);
+  opacity: 0.9;
 }
 
 .input-neon:focus {
-  border-color: rgba(189, 147, 249, 0.55);
-  box-shadow: 0 0 0 4px rgba(189, 147, 249, 0.08), 0 0 22px rgba(189, 147, 249, 0.1);
-  background: rgba(26, 27, 38, 0.95);
+  border-color: rgba(80, 250, 123, 0.55);
+  box-shadow: 0 0 0 4px rgba(80, 250, 123, 0.08), 0 0 22px rgba(80, 250, 123, 0.1);
+  background: rgba(26, 27, 34, 0.95);
 }
 
 .input-neon:focus-visible {
-  outline: 2px solid rgba(189, 147, 249, 0.4);
+  outline: 2px solid rgba(80, 250, 123, 0.4);
   outline-offset: 2px;
 }
 
@@ -370,16 +414,16 @@ button, a, input, textarea {
 
 .chip-btn {
   border-radius: 10px;
-  border: 1px solid rgba(59, 61, 86, 0.78);
-  background: rgba(59, 61, 86, 0.18);
-  color: var(--dracula-comment);
+  border: 1px solid var(--border);
+  background: rgba(68, 71, 90, 0.18);
+  color: var(--fg-muted);
   transition: border-color 150ms ease, background 150ms ease, transform 150ms ease, color 150ms ease;
 }
 
 .chip-btn:hover {
-  border-color: rgba(189, 147, 249, 0.35);
-  background: rgba(189, 147, 249, 0.06);
-  color: var(--dracula-fg);
+  border-color: var(--accent);
+  background: rgba(80, 250, 123, 0.06);
+  color: var(--fg);
   transform: translateY(-1px);
 }
 
@@ -405,7 +449,7 @@ button, a, input, textarea {
   inset: -1px;
   z-index: -1;
   border-radius: inherit;
-  background: linear-gradient(135deg, rgba(189, 147, 249, 0.85), rgba(255, 121, 198, 0.6), rgba(139, 233, 253, 0.75));
+  background: linear-gradient(135deg, rgba(80, 250, 123, 0.8), rgba(139, 233, 253, 0.5), rgba(80, 250, 123, 0.3));
   opacity: 0.55;
 }
 
@@ -414,7 +458,7 @@ button, a, input, textarea {
 .badge-credit {
   background: rgba(80, 250, 123, 0.12);
   border: 1px solid rgba(80, 250, 123, 0.25);
-  color: var(--dracula-green);
+  color: var(--success);
   border-radius: 8px;
   padding: 3px 10px;
   font-size: 12px;
@@ -425,9 +469,9 @@ button, a, input, textarea {
 }
 
 .badge-debit {
-  background: rgba(255, 121, 198, 0.12);
-  border: 1px solid rgba(255, 121, 198, 0.25);
-  color: var(--dracula-pink);
+  background: rgba(248, 248, 242, 0.04);
+  border: 1px solid var(--border);
+  color: var(--fg-muted);
   border-radius: 8px;
   padding: 3px 10px;
   font-size: 12px;
@@ -462,7 +506,7 @@ button, a, input, textarea {
 
 @keyframes neon-pulse {
   0%, 100% { opacity: 0.78; box-shadow: 0 0 24px rgba(139, 233, 253, 0.12); }
-  50%       { opacity: 1;    box-shadow: 0 0 44px rgba(189, 147, 249, 0.22); }
+  50%       { opacity: 1;    box-shadow: 0 0 44px rgba(80, 250, 123, 0.22); }
 }
 
 @keyframes shimmer {
@@ -481,7 +525,7 @@ button, a, input, textarea {
 }
 
 .skeleton {
-  background: linear-gradient(90deg, rgba(59, 61, 86, 0.4) 25%, rgba(80, 82, 110, 0.5) 50%, rgba(59, 61, 86, 0.4) 75%);
+  background: linear-gradient(90deg, rgba(68, 71, 90, 0.4) 25%, rgba(90, 93, 122, 0.5) 50%, rgba(68, 71, 90, 0.4) 75%);
   background-size: 800px 100%;
   animation: shimmer 1.8s infinite linear;
   border-radius: 8px;
