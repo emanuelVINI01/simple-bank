@@ -14,8 +14,8 @@ type I18nContextValue = {
 const I18nContext = createContext<I18nContextValue | null>(null);
 
 function detectLocale(): Locale {
-  if (typeof navigator === "undefined") return "pt-BR";
-  const lang = navigator.language ?? "pt-BR";
+  if (typeof navigator === "undefined") return "en";
+  const lang = navigator.language ?? "en";
   if (lang.startsWith("pt")) return "pt-BR";
   return "en";
 }

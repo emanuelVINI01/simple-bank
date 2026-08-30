@@ -422,7 +422,7 @@ class AiService {
   }
 
   private async resolvePaymentKeyByName(name: string, excludeUserId: string): Promise<string | null> {
-    const targetUser = await prisma.user.findFirst({
+    const matches = await prisma.user.findMany({
       where: {
         name: {
           contains: name,
@@ -436,9 +436,14 @@ class AiService {
           take: 1,
         },
       },
+      take: 2,
     });
 
-    return targetUser?.paymentKeys[0]?.key ?? null;
+    // Ambiguous (0 or >1 matches) must not silently pick a candidate in a
+    // financial transfer flow — force the caller down the "not resolved" path.
+    if (matches.length !== 1) return null;
+
+    return matches[0]?.paymentKeys[0]?.key ?? null;
   }
 
   async generateBudgetAdvice(userId: string, locale: "pt-BR" | "en") {
