@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { createLedgerPayment } from "../payment-service";
 import { prisma } from "../prisma";
-import { TransactionType } from "@prisma/client";
+import { TransactionType, type Prisma } from "@prisma/client";
 
 // Mock prisma
 vi.mock("../prisma", () => ({
@@ -35,8 +35,8 @@ describe("payment-service", () => {
         },
       };
 
-      vi.mocked(prisma.$transaction).mockImplementation(async (callback: (tx: unknown) => Promise<unknown>) => {
-        return callback(mockTx);
+      vi.mocked(prisma.$transaction).mockImplementation(async (callback) => {
+        return callback(mockTx as unknown as Prisma.TransactionClient);
       });
 
       const result = await createLedgerPayment({
@@ -75,8 +75,8 @@ describe("payment-service", () => {
         },
       };
 
-      vi.mocked(prisma.$transaction).mockImplementation(async (callback: (tx: unknown) => Promise<unknown>) => {
-        return callback(mockTx);
+      vi.mocked(prisma.$transaction).mockImplementation(async (callback) => {
+        return callback(mockTx as unknown as Prisma.TransactionClient);
       });
 
       const result = await createLedgerPayment({
@@ -111,8 +111,8 @@ describe("payment-service", () => {
         },
       };
 
-      vi.mocked(prisma.$transaction).mockImplementation(async (callback: (tx: unknown) => Promise<unknown>) => {
-        return callback(mockTx);
+      vi.mocked(prisma.$transaction).mockImplementation(async (callback) => {
+        return callback(mockTx as unknown as Prisma.TransactionClient);
       });
 
       const result = await createLedgerPayment({

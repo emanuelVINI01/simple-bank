@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, type PropsWithChildren, useCallback, useContext, useMemo, useState } from "react";
+import { createContext, type PropsWithChildren, useCallback, useContext, useMemo, useState, useSyncExternalStore } from "react";
 import { dictionaries, type DictionaryKey, type Locale } from "@/src/i18n/dictionaries";
 
 type TranslateParams = Record<string, string | number>;
@@ -20,8 +20,17 @@ function detectLocale(): Locale {
   return "en";
 }
 
+function subscribeLocale(onChange: () => void) {
+  window.addEventListener("languagechange", onChange);
+  return () => window.removeEventListener("languagechange", onChange);
+}
+
+const serverLocale = (): Locale => "en";
+
 export function I18nProvider({ children, initialLocale }: PropsWithChildren<{ initialLocale?: Locale }>) {
-  const [locale, setLocale] = useState<Locale>(initialLocale ?? detectLocale());
+  const detectedLocale = useSyncExternalStore(subscribeLocale, detectLocale, serverLocale);
+  const [selectedLocale, setLocale] = useState<Locale | undefined>(initialLocale);
+  const locale = selectedLocale ?? detectedLocale;
 
   const t = useCallback(
     (key: DictionaryKey, params?: TranslateParams) => translate(locale, key, params),
